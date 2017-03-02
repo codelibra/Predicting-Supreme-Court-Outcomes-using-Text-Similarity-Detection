@@ -1,2 +1,1 @@
-### Initial Readme
 ### Project Details
