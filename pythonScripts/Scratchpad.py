@@ -55,7 +55,6 @@ for idx,f in enumerate(similar_cases):
     print similar_cases[idx] +" -> "+ str(get_case_outcomes_for_file(f))
 
 
-data
 
 
 
@@ -75,13 +74,11 @@ temp
 
 
 
-print sc_lc[sc_lc['caseid']=='X125RLM003']['term']
-
-print temp[temp['query_file']=='X125RLM003.p']['similar_cases']
 
 
 # query X125RLM003.p
-# results ['X3C7FN.p', 'X3G3UN.p', 'X3N2AT.p', 'X3STSL.p', 'X3SVLB.p', 'X40SI8.p', 'X41U2A.p', 'X444UL.p', 'X44CQF.p', 'X44EKO.p']
+# ['X3N2AT.p', 'X3STSL.p', 'X3SVLB.p', 'X40SI8.p', 'X41U2A.p', 'X444UL.p', 'X44CQF.p', 'X44EKO.p']
+# ['X3N2AT.p', 'X3STSL.p', 'X40SI8.p', 'X420CQ.p', 'X42GRI.p', 'X44EKO.p', 'X49BDU.p', 'X49G2R.p']
 
 
 
