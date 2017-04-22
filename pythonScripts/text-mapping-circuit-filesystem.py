@@ -3,19 +3,16 @@
 
 # ### This file copies circuit court bloomberg text to folder circuit-scbd-mapped-files which have supreme court case associated.
 
-# In[1]:
 
 import pandas as pd
 import pickle
 import sys
 
 
-# In[9]:
 
 circuit_files = pd.read_csv('/Users/shiv/.bin/10_scotus/sc_lc_link.csv')
 
 
-# In[10]:
 
 count = 0
 for file,term in zip(circuit_files['caseid'],circuit_files['term']):
@@ -29,7 +26,5 @@ for file,term in zip(circuit_files['caseid'],circuit_files['term']):
         print e
 
 
-# In[7]:
 
 print count
-

@@ -18,8 +18,7 @@ import os
 
 # In[14]:
 
-for root, dirs, files in os.walk('/Users/shiv/Desktop/circuit-scbd-mapped-files/', topdown=False):
+for root, dirs, files in os.walk('circuit-scbd-mapped-files/', topdown=False):
     for idx,name in enumerate(tqdm(files)):
         print name
         sleep(10)
-

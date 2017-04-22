@@ -1,7 +1,6 @@
 
 # coding: utf-8
 
-# In[ ]:
 
 import dropbox
 import pandas as pd
@@ -9,7 +8,6 @@ import pickle
 import sys
 
 
-# In[ ]:
 
 # Include the Dropbox SDK
 
@@ -33,17 +31,14 @@ client = dropbox.client.DropboxClient(access_token)
 print 'linked account: ', client.account_info()
 
 
-# In[ ]:
 
 access_token
 
 
-# In[ ]:
 
 dbx = dropbox.Dropbox(access_token)
 
 
-# In[ ]:
 
 f, metadata = client.get_file_and_metadata('/1880_complete/XALNA1.html')
 out = open('/Users/shiv/Desktop/magnum-opus.html', 'wb')
@@ -52,12 +47,10 @@ out.close()
 print metadata
 
 
-# In[ ]:
 
 circuit_files = pd.read_csv('/Users/shiv/.bin/10_scotus/sc_lc_link.csv')
 
 
-# In[ ]:
 
 for file,term in zip(circuit_files['caseid'],circuit_files['term']):
     path =  '/'+str(term)+'_complete/'+file+".html"
@@ -68,4 +61,3 @@ for file,term in zip(circuit_files['caseid'],circuit_files['term']):
         out.close()
     except:
         print path
-
