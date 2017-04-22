@@ -10,6 +10,8 @@ import math
 from numpy import inf
 import pickle
 from os.path import dirname
+from sklearn.preprocessing import normalize
+
 
 
 
@@ -27,8 +29,8 @@ get_ipython().magic(u"run 'text-mapping-circuit-filesystem.ipynb'")
 
 
 data = gl.SFrame({'filename':[""], 'text':[""]})
-count = 1880
-for root, dirs, files in os.walk('circuit-scbd-mapped-files/', topdown=False):
+count = 0
+for root, dirs, files in os.walk('../data/circuit-scbd-mapped-files/', topdown=False):
     for idx,name in enumerate(files):
         if ".p" in name:
             res = pickle.load(open( os.path.join(root, name), "rb" ))
@@ -44,18 +46,16 @@ data['tf_idf'] = gl.text_analytics.tf_idf(docs)
 
 # This is added since the first data element is empty.
 data = data[1:]
-data.save('data/tf-idf-dataframe')
-
-
-# ## Save output
-
-
-data = gl.load_sframe('data/tf-idf-dataframe')
 data = data.add_row_number()
+data.save('../data/tf-idf-dataframe')
+
+
+## load output
+data = gl.load_sframe('../data/tf-idf-dataframe')
 
 
 
-def dataframe_to_scipy(x, column_name):
+def dataframe_to_scipy_sparse(x, column_name):
     '''
     Convert a dictionary column of an SFrame into a sparse matrix format where
     each (row_id, column_id, value) triple corresponds to the value of
@@ -95,25 +95,21 @@ def dataframe_to_scipy(x, column_name):
 
 
 
-tf_idf, map_index_to_word = dataframe_to_scipy(data, 'tf_idf')
-
-
-
-from sklearn.preprocessing import normalize
-tf_idf = normalize(tf_idf)
+tf_idf, map_index_to_word = dataframe_to_scipy_sparse(data, 'tf_idf')
+tf_idf_normalise = normalize(tf_idf)
 
 
 # ### Save sparse matrix representation
-
-
-io.mmwrite("data/tf-idf-sparse-normalized.mtx", tf_idf)
-
+io.mmwrite("../data/tf-idf-sparse.mtx", tf_idf)
+io.mmwrite("../data/tf-idf-sparse-normalized.mtx", tf_idf_normalise)
 
 
 # back to sparse matrix
-newm = io.mmread("data/tf-idf-sparse-normalized")
-tf_idf = newm.tocsr()
+#newm = io.mmread("data/tf-idf-sparse")
+#newm_norm = io.mmread("data/tf-idf-sparse-normalized")
+#tf_idf = newm.tocsr()
+#tf_idf_normalise = newm_norm.tocsr()
 
 
-
-dense = tf_idf.todense()
+# change sparse matrix to dense matrix.
+#dense = tf_idf.todense()

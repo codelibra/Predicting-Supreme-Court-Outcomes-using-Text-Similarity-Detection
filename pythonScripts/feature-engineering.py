@@ -1,7 +1,7 @@
 
 from sklearn.neighbors import NearestNeighbors
 # we need to tune the number of neighbours
-neigh = NearestNeighbors(n_neighbors=10)
+neigh = NearestNeighbors(n_neighbors=11)
 neigh.fit(tf_idf)
 
 
@@ -46,7 +46,7 @@ def get_compare_case_outcomes(cases):
     reverse = 0
     outcome = 0
     for idx,case in enumerate(cases):
-        case_outcome = print_case_outcomes_for_file(case)
+        case_outcome = get_case_outcomes_for_file(case)
         if case_outcome == -1:
             continue
         neighbour_filename_outcome.append({'file': case, 'outcome': case_outcome})
@@ -65,15 +65,22 @@ def get_compare_case_outcomes(cases):
 
 
 
-def get_overall_score_tf_idf():
+def get_filtered_tf_idf(num_correct=5, num_incorrect=5):
     correct = 0
     incorrect = 0
     num = tf_idf.shape[0]
     nearest_neighbour_data = {}
     for idx in range(1,num):
-        print idx
         # used 11 since one of the files is always the query file itself
-        neighs = neigh.kneighbors(tf_idf[idx], 11, return_distance=False)[0][1:]
+        knn_output = neigh.kneighbors(tf_idf[idx], 11)
+        neighs = knn_output[1][0][1:]
+        distances =  knn_output[0][0][1:]
+
+        file_distance_dict = {}
+        for index,n in enumerate(neighs):
+            key = str(data[data['id']==n]['filename'][0])
+            file_distance_dict[key] = distances[index]
+
         similar_cases = data.filter_by(neighs, 'id')['filename']
         df,predicted_outcome = get_compare_case_outcomes(similar_cases)
         query_file = data[data['id']==idx]['filename'] [0]
@@ -84,14 +91,34 @@ def get_overall_score_tf_idf():
         else:
             incorrect = incorrect + 1
 
+        print str(idx) + " correct: " + str(correct) + "incorrect: " + str(incorrect)
         nearest_neighbour_data[idx] = {'query_file': query_file,
                                        'similar_cases': similar_cases,
+                                       'distances' : file_distance_dict,
                                        'similar_case_outcomes' : df,
-                                       'correct':correct,
-                                       'incorrect':incorrect
+                                       'isSuccess':(actual_outcome == predicted_outcome),
                                       }
+        # breaking when number of correct/incorrect for analysis is acquired
+        if num_correct <= correct and num_incorrect <= incorrect:
+            break
 
     return correct, incorrect, nearest_neighbour_data
+
+
+
+overall_correct, overall_incorrect, nearest_neighbour_data = get_filtered_tf_idf()
+accuracy = float(overall_correct)/float(overall_incorrect+overall_correct)
+
+
+print accuracy*100
+
+
+
+
+
+
+
+
 
 
 
@@ -133,15 +160,6 @@ def get_overall_score_cosine_similarity():
                                       }
 
     return correct, incorrect, nearest_neighbour_data
-
-
-
-overall_correct, overall_incorrect, nearest_neighbour_data = get_overall_score_tf_idf()
-accuracy = float(overall_correct)/float(overall_incorrect+overall_correct)
-
-
-print accuracy*100
-
 
 
 
