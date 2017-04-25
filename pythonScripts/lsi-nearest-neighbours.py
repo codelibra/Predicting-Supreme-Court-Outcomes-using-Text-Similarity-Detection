@@ -65,7 +65,8 @@ def get_overall_score_ldi():
                 sims = index[vec_lsi]
                 sims = sorted(enumerate(sims), key=lambda item: -item[1])
                 cases = []
-                for f,score in sims[0:10]:
+                # excluding 0th since it will be the query doc itself
+                for f,score in sims[1:11]:
                     cases.append(all_file_names[f][0])
                 df,predicted_outcome = get_compare_case_outcomes(cases)
 
