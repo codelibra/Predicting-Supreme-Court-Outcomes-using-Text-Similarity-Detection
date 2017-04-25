@@ -46,7 +46,7 @@ def get_compare_case_outcomes(cases):
     reverse = 0
     outcome = 0
     for idx,case in enumerate(cases):
-        case_outcome = print_case_outcomes_for_file(case)
+        case_outcome = get_case_outcomes_for_file(case)
         if case_outcome == -1:
             continue
         neighbour_filename_outcome.append({'file': case, 'outcome': case_outcome})
@@ -71,7 +71,6 @@ def get_overall_score_tf_idf():
     num = tf_idf.shape[0]
     nearest_neighbour_data = {}
     for idx in range(1,num):
-        print idx
         # used 11 since one of the files is always the query file itself
         neighs = neigh.kneighbors(tf_idf[idx], 11, return_distance=False)[0][1:]
         similar_cases = data.filter_by(neighs, 'id')['filename']
@@ -90,6 +89,9 @@ def get_overall_score_tf_idf():
                                        'correct':correct,
                                        'incorrect':incorrect
                                       }
+        accuracy = (float(correct)*100)/float(incorrect+correct)
+        print str(idx) + " "+ str(correct) + " " + str(incorrect) + " " + str(accuracy)
+
 
     return correct, incorrect, nearest_neighbour_data
 
@@ -131,9 +133,7 @@ def get_overall_score_cosine_similarity():
                                        'correct':correct,
                                        'incorrect':incorrect
                                       }
-
     return correct, incorrect, nearest_neighbour_data
-
 
 
 overall_correct, overall_incorrect, nearest_neighbour_data = get_overall_score_tf_idf()

@@ -4,9 +4,8 @@ neigh = NearestNeighbors(n_neighbors=11)
 neigh.fit(tf_idf)
 
 
-sc_lc = pd.read_csv('C:\Users\Admin\Documents\ml\project\scotus\sc_lc.csv')
+sc_lc = pd.read_csv('../data/sc_lc.csv')
 
-data = pd.read_csv('C:\Users\Admin\Documents\ml\project\scotus\data\complete_data.csv')
 
 # # Case similarity approach
 # ### Algorithms
@@ -75,7 +74,6 @@ def get_filtered_tf_idf(num_correct=5, num_incorrect=5):
     return correct, incorrect, nearest_neighbour_data
 
 
-
 overall_correct, overall_incorrect, nearest_neighbour_data = get_filtered_tf_idf()
 accuracy = float(overall_correct)/float(overall_incorrect+overall_correct)
 print accuracy*100
@@ -85,6 +83,7 @@ print accuracy*100
 
 
 
+data = data.to_dataframe()
 
 
 def get_overall_score_cosine_similarity():

@@ -109,10 +109,10 @@ io.mmwrite("../data/tf-idf-sparse-normalized.mtx", tf_idf_normalise)
 
 
 # back to sparse matrix
-#newm = io.mmread("data/tf-idf-sparse")
-#newm_norm = io.mmread("data/tf-idf-sparse-normalized")
-#tf_idf = newm.tocsr()
-#tf_idf_normalise = newm_norm.tocsr()
+newm = io.mmread("../data/tf-idf-sparse")
+newm_norm = io.mmread("../data/tf-idf-sparse-normalized")
+tf_idf = newm.tocsr()
+tf_idf_normalise = newm_norm.tocsr()
 
 
 # change sparse matrix to dense matrix.
