@@ -4,21 +4,8 @@ sc_lc = pd.read_csv('../data/sc_lc.csv')
 
 # # Case similarity approach
 # ### Algorithms
-# 1. Using tf-idf and 10 nearest neighbour search
-# 2. Using cosine similarity
+# Using lsi model and 10 nearest neighbour search
 #
-# ### Steps
-# 1. Genearate tf-idf/word vector data for circuit court bloomberg text.
-# 2. Map circuit court data to scbd data ie., use only those circuit court texts which were appealed in supreme court.
-# 3. Train model based on Nearest neighbour model.
-# 4. Predict for all cases.
-# 5. Evaluate outcome
-#
-# ### Evaluation
-# 1. Predict for all scbd cases
-# 2. Since cases are justice centred, each docket will appear 8-9 times (ie., number of judges). Since *case_outcome_disposition* is same for all, use any of them.
-# 3. Take majority vote of 10 nearest neighbour, and take that as predicted output.
-# 4. accuracy = number of correct predictoins / total number of cases
 index = similarities.MatrixSimilarity(lsi[corpus_tfidf])
 
 
@@ -104,13 +91,5 @@ def get_overall_score_ldi():
 overall_correct, overall_incorrect, nearest_neighbour_data = get_overall_score_ldi()
 accuracy = float(overall_correct)/float(overall_incorrect+overall_correct)
 
-
-print accuracy*100
-
-
-
-# Some files are not found, could not download all files post 1975
-overall_correct, overall_incorrect, nearest_neighbour_data = get_overall_score_cosine_similarity()
-accuracy = float(overall_correct)/float(overall_incorrect+overall_correct)
 
 print accuracy*100

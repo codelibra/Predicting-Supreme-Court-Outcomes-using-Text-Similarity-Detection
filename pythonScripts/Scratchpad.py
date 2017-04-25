@@ -70,10 +70,14 @@ temp.to_csv('../tempData/neigh.csv')
 
 
 
+temp['diff'] = temp['correct'] - temp['incorrect']
+sumi = 0
+for i, num in enumerate(temp['incorrect']):
+    temp['incorrect'].iloc[i] = num - sumi
+    sumi = sumi + num
+
+
 temp
-
-
-
 
 
 # query X125RLM003.p
