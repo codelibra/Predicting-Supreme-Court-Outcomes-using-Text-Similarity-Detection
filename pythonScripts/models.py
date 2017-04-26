@@ -1,12 +1,18 @@
+import pandas as pd
+import os
 
-from sklearn.neighbors import NearestNeighbors
-# we need to tune the number of neighbours
-neigh = NearestNeighbors(n_neighbors=10)
-neigh.fit(tf_idf)
+# First load data
+if(os.path.exists('../data/complete_data.csv')):
+    data = pd.read_csv('../data/complete_data.csv')
 
+# Then generate tf-idf
+from sklearn.feature_extraction.text import TfidfVectorizer
+files = [os.path.join('../data/circuit-scbd-mapped-files/',f) for f in os.listdir('../data/circuit-scbd-mapped-files/')]
+model = TfidfVectorizer(ngram_range=(1, 3), min_df=0, stop_words='english')
+tf_idf = model.fit_transform(files)
 
+# Then load sc-lc file
 sc_lc = pd.read_csv('../data/sc_lc.csv')
-
 
 # # Case similarity approach
 # ### Algorithms
@@ -64,7 +70,9 @@ def get_compare_case_outcomes(cases):
     return neighbour_filename_outcome,outcome
 
 
-
+'''
+This function computes the nearest neighbours based on tf-idf using euclidean tf-idf
+'''
 def get_overall_score_tf_idf():
     correct = 0
     incorrect = 0
@@ -73,9 +81,9 @@ def get_overall_score_tf_idf():
     for idx in range(1,num):
         # used 11 since one of the files is always the query file itself
         neighs = neigh.kneighbors(tf_idf[idx], 11, return_distance=False)[0][1:]
-        similar_cases = data.filter_by(neighs, 'id')['filename']
+        similar_cases = data[data['id'].isin(neighs)]['filename'].tolist()
         df,predicted_outcome = get_compare_case_outcomes(similar_cases)
-        query_file = data[data['id']==idx]['filename'] [0]
+        query_file = data[data['id']==idx]['filename'].iloc[0]
         actual_outcome = get_case_outcomes_for_file(query_file)
 
         if actual_outcome == predicted_outcome:
@@ -92,11 +100,11 @@ def get_overall_score_tf_idf():
         accuracy = (float(correct)*100)/float(incorrect+correct)
         print str(idx) + " "+ str(correct) + " " + str(incorrect) + " " + str(accuracy)
 
-
     return correct, incorrect, nearest_neighbour_data
 
-
-
+'''
+This function computes the nearest neighbours based on cosine similarity
+'''
 def get_overall_score_cosine_similarity():
     def getKey(item):
         return item[0]
@@ -115,11 +123,9 @@ def get_overall_score_cosine_similarity():
         for key,val in tuples[0:10]:
             neighs.append(val)
 
-        similar_cases = data.filter_by(neighs, 'id')['filename']
+        similar_cases = data[data['id'].isin(neighs)]['filename'].tolist()
         df,outcome = get_compare_case_outcomes(similar_cases)
-        if outcome == -1:
-            continue
-        query_file = data[data['id']==idx]['filename'] [0]
+        query_file = data[data['id']==idx]['filename'].iloc[0]
         actual_outcome = get_case_outcomes_for_file(query_file)
 
         if actual_outcome == outcome:
@@ -136,17 +142,17 @@ def get_overall_score_cosine_similarity():
     return correct, incorrect, nearest_neighbour_data
 
 
+from sklearn.neighbors import NearestNeighbors
+# we need to tune the number of neighbours
+neigh = NearestNeighbors(n_neighbors=10)
+neigh.fit(tf_idf)
+
+#For euclidean tf-idf
 overall_correct, overall_incorrect, nearest_neighbour_data = get_overall_score_tf_idf()
 accuracy = float(overall_correct)/float(overall_incorrect+overall_correct)
-
-
 print accuracy*100
 
-
-
-
-# Some files are not found, could not download all files post 1975
+#For cosine similarity
 overall_correct, overall_incorrect, nearest_neighbour_data = get_overall_score_cosine_similarity()
 accuracy = float(overall_correct)/float(overall_incorrect+overall_correct)
-
 print accuracy*100
