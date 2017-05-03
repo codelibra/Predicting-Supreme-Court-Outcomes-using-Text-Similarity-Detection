@@ -35,8 +35,6 @@ tf_idf_normalise.shape
 
 
 
-
-
 neighs = neigh.kneighbors(tf_idf[128], 10)
 
 neighs

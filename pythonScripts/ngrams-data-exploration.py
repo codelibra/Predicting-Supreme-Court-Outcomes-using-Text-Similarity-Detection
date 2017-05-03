@@ -23,7 +23,7 @@ pd.options.display.max_columns = 100
 # # Create Data folder for further usage
 
 
-get_ipython().magic(u"run 'text-mapping-circuit-filesystem.ipynb'")
+#get_ipython().magic(u"run 'text-mapping-circuit-filesystem.ipynb'")
 
 
 # # Generate tf-idf circuit court data
