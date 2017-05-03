@@ -6,7 +6,8 @@ sc_lc = pd.read_csv('../data/sc_lc.csv')
 # ### Algorithms
 # Using lsi model and 10 nearest neighbour search
 #
-index = similarities.MatrixSimilarity(lsi[corpus_tfidf])
+index_lsi = similarities.MatrixSimilarity(lsi[corpus_tfidf])
+index_lda = similarities.MatrixSimilarity(lsi[corpus_tfidf])
 
 
 def get_file_outcome(file):
@@ -46,7 +47,7 @@ def get_compare_case_outcomes(cases):
 
 
 
-def get_overall_score_ldi():
+def get_overall_score_lsi():
     correct = 0
     incorrect = 0
     nearest_neighbour_data = {}
@@ -61,13 +62,13 @@ def get_overall_score_ldi():
                 res = [word for word in res if len(word)>3 ]
                 vec_bow = dictionary.doc2bow(res)
                 vec_tf_idf = tfidf[vec_bow]
-                vec_lsi = lsi[vec_tf_idf] # convert the query to LSI space
-                sims = index[vec_lsi]
+                vec_lsi = lsi_model[vec_tf_idf] # convert the query to LSI space
+                sims = index_lsi[vec_lsi]
                 sims = sorted(enumerate(sims), key=lambda item: -item[1])
                 cases = []
                 # excluding 0th since it will be the query doc itself
                 for f,score in sims[1:11]:
-                    cases.append(all_file_names[f][0])
+                    cases.append(all_file_names[f])
                 df,predicted_outcome = get_compare_case_outcomes(cases)
 
                 actual_outcome = get_file_outcome(name)
@@ -89,7 +90,58 @@ def get_overall_score_ldi():
     return correct, incorrect, nearest_neighbour_data
 
 
-overall_correct, overall_incorrect, nearest_neighbour_data = get_overall_score_ldi()
+overall_correct, overall_incorrect, nearest_neighbour_data = get_overall_score_lsi()
+accuracy = float(overall_correct)/float(overall_incorrect+overall_correct)
+
+
+print accuracy*100
+
+
+
+def get_overall_score_lda():
+    correct = 0
+    incorrect = 0
+    nearest_neighbour_data = {}
+    for root, dirs, files in os.walk('../data/circuit-scbd-mapped-files/', topdown=False):
+        for idx,name in enumerate(files):
+            if ".p" in name:
+                res = pickle.load(open(os.path.join(root, name), "rb" ))
+                res = " ".join(res).lower()
+                res = "".join(l for l in res if l not in string.punctuation)
+                res = res.encode('ascii', 'ignore').decode('ascii').split()
+                res = [word for word in res if word not in stopwords.words('english')]
+                res = [word for word in res if len(word)>3 ]
+                vec_bow = dictionary.doc2bow(res)
+                vec_tf_idf = tfidf[vec_bow]
+                vec_lda = lda[vec_tf_idf] # convert the query to LSI space
+                sims = index_lda[vec_lda]
+                sims = sorted(enumerate(sims), key=lambda item: -item[1])
+                cases = []
+                # excluding 0th since it will be the query doc itself
+                for f,score in sims[1:11]:
+                    cases.append(all_file_names[f])
+                df,predicted_outcome = get_compare_case_outcomes(cases)
+
+                actual_outcome = get_file_outcome(name)
+
+                if actual_outcome == predicted_outcome:
+                    correct = correct + 1
+                else:
+                    incorrect = incorrect + 1
+
+                nearest_neighbour_data[idx] = {'query_file': name,
+                                               'similar_cases': cases,
+                                               'similar_case_outcomes' : df,
+                                               'correct':correct,
+                                               'incorrect':incorrect
+                                              }
+                accuracy = (float(correct)*100)/float(incorrect+correct)
+                print str(idx) + " "+ str(correct) + " " + str(incorrect) + " " + str(accuracy)
+
+    return correct, incorrect, nearest_neighbour_data
+
+
+overall_correct, overall_incorrect, nearest_neighbour_data = get_overall_score_lda()
 accuracy = float(overall_correct)/float(overall_incorrect+overall_correct)
 
 

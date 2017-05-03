@@ -17,6 +17,14 @@ import os
 from gensim import corpora
 
 all_files = []
+all_file_names = []
+for root, dirs, files in os.walk('../data/circuit-scbd-mapped-files/', topdown=False):
+    for idx,name in enumerate(files):
+        if ".p" in name:
+            all_files.append(root+name)
+
+
+
 texts = []
 count = 0
 for root, dirs, files in os.walk('../data/circuit-scbd-mapped-files/', topdown=False):
@@ -29,30 +37,32 @@ for root, dirs, files in os.walk('../data/circuit-scbd-mapped-files/', topdown=F
             res = [word for word in res if word not in stopwords.words('english')]
             res = [word for word in res if len(word)>3 ]
             texts.append(res)
-            all_files.append(name)
+            all_file_names.append(name)
             print count
             count = count + 1
 
 
 dictionary = corpora.Dictionary(texts)
-dictionary.save('../data/my-dictionary.dict')  # store the dictionary, for future reference
+dictionary.save('../data/lsi-dictionary.dict')  # store the dictionary, for future reference
 
 my_corpus = [dictionary.doc2bow(text) for text in texts]
-corpora.MmCorpus.serialize('../data/my-corpus.mm', my_corpus)
+corpora.MmCorpus.serialize('../data/lsi-corpus.mm', my_corpus)
 
 tfidf = models.TfidfModel(my_corpus)
 corpus_tfidf = tfidf[my_corpus]
 
-lsi = models.LdaModel(corpus_tfidf, id2word=dictionary, num_topics=100)
-corpus_lsi = lsi[corpus_tfidf]
-lsi.print_topics()
+lda = models.LdaModel(corpus_tfidf, id2word=dictionary, num_topics=50)
+corpus_lda = lda[corpus_tfidf]
+lda.print_topics()
 
+lsi_model = models.LsiModel(corpus_tfidf, id2word=dictionary, num_topics=100)
+corpus_lsi_model = lsi_model[corpus_tfidf]
+lsi_model.print_topics()
 
+index_lsi = similarities.MatrixSimilarity(lsi_model[corpus_tfidf])
+index_lda = similarities.MatrixSimilarity(lda[corpus_tfidf])
 
-
-
-
-# Testing the results of a single document
+#----------- Testing the results of a single document
 res = pickle.load(open("/Users/shiv/.bin/10_scotus/data/circuit-scbd-mapped-files/X4AF96.p", "rb" ))
 res = " ".join(res).lower()
 res = "".join(l for l in res if l not in string.punctuation)
@@ -62,28 +72,36 @@ res = [word for word in res if len(word)>3 ]
 
 vec_bow = dictionary.doc2bow(res)
 vec_tf_idf = tfidf[vec_bow]
-vec_lsi = lsi[vec_tf_idf] # convert the query to LSI space
+vec_lsi = lsi_model[vec_tf_idf] # convert the query to LSI space
+vec_lda = lda[vec_tf_idf] # convert the query to LSI space
 
-# generate index for matrix similarity calculation.
-index = similarities.MatrixSimilarity(lsi[corpus_tfidf])
-sims = index[vec_lsi]
+sims = index_lsi[vec_lsi]
 # top 10 similar documents
-sims = sorted(enumerate(sims), key=lambda item: -item[1])
-sims[0:10]
+sims_lsi = sorted(enumerate(sims), key=lambda item: -item[1])
+sims_lsi[0:10]
 
-print(sims) # print sorted (document number, similarity score) 2-tuples
+
+
+
+sims = index_lda[vec_lda]
+# top 10 similar documents
+sims_lda = sorted(enumerate(sims), key=lambda item: -item[1])
+sims_lda[0:10]
+
+
+
+
 
 texts[403]
 
 cases = []
-for key,val in sims[0:10]:
+for key,val in sims_lda[0:10]:
     print key
     cases.append(all_files[key])
 cases
 
 
-
-# Generate all_file_names data structure for lsi-nearest-neighbour model
-all_file_names = []
-for test in all_files:
-    all_file_names.append(test.split('/')[-1:])
+for key,val in sims_lsi[0:10]:
+    print key
+    cases.append(all_files[key])
+cases
