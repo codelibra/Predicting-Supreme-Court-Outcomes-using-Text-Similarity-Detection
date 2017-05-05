@@ -70,13 +70,14 @@ def extract_filename_and_column_from_scbd(column_name):
      return category_per_filename
 
 
-def merge_lda_model(dataframe):
-    files_not_found = lda_dataframe[~lda_dataframe['filename'].isin(dataframe['filename'])]
+def merge_lda_model(main_dataframe, dataframe):
+    files_not_found = main_dataframe[~main_dataframe['filename'].isin(dataframe['filename'])]
     print 'Number of filenames not found ' + str(files_not_found.shape[0])
     print files_not_found['filename']
-    merged_dataframe = lda_dataframe.merge(dataframe, on='filename', how='left')
+    merged_dataframe = main_dataframe.merge(dataframe, on='filename', how='left')
     return merged_dataframe
 
+print 'Initial lda columns ' + str(lda_dataframe.shape[1])
 print 'Loading citations data...'
 valid_citations = pd.read_csv('../data/case_id_citations_merged.csv').columns
 citations_dict = pickle.load(open('../data/citations_dict.pkl','rb'))
@@ -88,27 +89,30 @@ for key, values in citations_dict.iteritems():
          files = [value for value in values if value in valid_citations]
          pruned_citations_dict[key] = files
          count = count + 1
-         print count
 citations_dataframe = one_hot_encode_categories(pruned_citations_dict, 'citations')
-lda_dataframe = merge_lda_model(citations_dataframe)
+lda_dataframe = merge_lda_model(lda_dataframe, citations_dataframe)
+print 'Lda columns after citations ' + str(lda_dataframe.shape[1])
 
 print 'Merging issues data...'
 category_per_filename = extract_filename_and_column_from_scbd('issue')
 issues_dataframe = one_hot_encode_categories(category_per_filename,'issue')
 del issues_dataframe['issue = nan']
-lda_dataframe = merge_lda_model(issues_dataframe)
+lda_dataframe = merge_lda_model(lda_dataframe, issues_dataframe)
+print 'Lda columns after issues ' + str(lda_dataframe.shape[1])
 
 print 'Merging issue area data...'
 category_per_filename = extract_filename_and_column_from_scbd('issueArea')
 issueArea_dataframe = one_hot_encode_categories(category_per_filename,'issueArea')
 del issueArea_dataframe['issueArea = nan']
-lda_dataframe = merge_lda_model(issueArea_dataframe)
+lda_dataframe = merge_lda_model(lda_dataframe, issueArea_dataframe)
+print 'Lda columns after issue area ' + str(lda_dataframe.shape[1])
 
 print 'Merging law supplement data...'
 category_per_filename = extract_filename_and_column_from_scbd('lawSupp')
 lawSupplement_dataframe = one_hot_encode_categories(category_per_filename,'lawSupp')
 del lawSupplement_dataframe['lawSupp = nan']
-lda_dataframe = merge_lda_model(lawSupplement_dataframe)
+lda_dataframe = merge_lda_model(lda_dataframe, lawSupplement_dataframe)
+print 'Lda columns after law supplement ' + str(lda_dataframe.shape[1])
 
 def calculate_cosine_similarity(row1, row2):
     from sklearn.metrics.pairwise import cosine_similarity
