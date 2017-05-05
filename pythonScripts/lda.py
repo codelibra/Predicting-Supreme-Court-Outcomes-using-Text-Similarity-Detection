@@ -24,8 +24,8 @@ print 'Loading input from filesystem... '
 print '1. Document Topic distribution.'
 print '2. Filenames'
 print '3. Number of topics(hard-coded)'
-lda_corpus = corpora.MmCorpus('../data/lda-corpus.mm')
-with open('../data/filenames.out','rb') as f:
+lda_corpus = corpora.MmCorpus('../data/best_lda/lda-corpus.mm')
+with open('../data/best_lda/filenames.out','rb') as f:
     filenames = pickle.load(f)
 best_num_topics = 40 #ideally from gridsearchcv
 
@@ -114,39 +114,112 @@ del lawSupplement_dataframe['lawSupp = nan']
 lda_dataframe = merge_lda_model(lda_dataframe, lawSupplement_dataframe)
 print 'Lda columns after law supplement ' + str(lda_dataframe.shape[1])
 
-def calculate_cosine_similarity(row1, row2):
-    from sklearn.metrics.pairwise import cosine_similarity
-    weightage = {'topic' : 1, 'citations' : 3, 'issue' : 10, 'issueArea' : 5, 'lawSupp': 8}
-    total_cosine_similarity = 0
-    for category, weight in weightage.iteritems():
+def get_file_outcome(file):
+    # NOTE: -2 is used since the files were in .p format 2 is length of ".p"
+    # If extension changes we need to change this .2
+    if len(sc_lc[sc_lc['caseid']==file[:-2]]['case_outcome_disposition'].values) > 0:
+        return sc_lc[sc_lc['caseid']==file[:-2]]['case_outcome_disposition'].values[0]
+    else:
+        print "File not found "+file
+        return -1
+
+def get_compare_case_outcomes(cases):
+    '''
+    TODO: remove the actual case whose neighbour are being considered
+    '''
+    neighbour_filename_outcome = []
+    affirm = 0
+    reverse = 0
+    outcome = 0
+    for idx,case in enumerate(cases):
+        case_outcome = get_file_outcome(case)
+        if case_outcome == -1:
+            continue
+        neighbour_filename_outcome.append({'file': case, 'outcome': case_outcome})
+        if case_outcome == 1:
+            affirm = affirm + 1
+        else:
+            reverse = reverse + 1
+
+    if affirm>reverse:
+        outcome = 1
+    else:
+        # if number of affirms is same as reverse we predict reverse.
+        # this assumption is made making use of scotus-1, where baseline classifier always predicts reverse.
+        outcome = 0
+    return neighbour_filename_outcome,outcome
+
+
+feature_weights = {'topic' : 1, 'citations' : 3, 'issue' : 10, 'issueArea' : 5, 'lawSupp': 8}
+
+def calculate_begina_and_end_index():
+    weightage_indexes = {}
+    for category, weight in feature_weights.iteritems():
         category_first_idx = next(idx for idx,column_name in enumerate(lda_dataframe.columns) if category in column_name)
         category_last_idx = next(idx for idx,column_name in enumerate(reversed(lda_dataframe.columns)) if category in column_name)
         category_last_idx = len(lda_dataframe.columns) - category_last_idx
-        #print 'sklearn value'
-        #print row1[category_first_idx:category_last_idx]
-        #print row2[category_first_idx:category_last_idx]
-        #print cosine_similarity(row1[category_first_idx:category_last_idx].reshape(1,-1),row2[category_first_idx:category_last_idx].reshape(1,-1))
-        #print 'weight'
-        #print weightage[category]
-        total_cosine_similarity += weightage[category] * cosine_similarity(row1[category_first_idx:category_last_idx].reshape(1,-1),row2[category_first_idx:category_last_idx].reshape(1,-1))
-    print 'total_cosine_similarity ' + str(total_cosine_similarity)
+        weightage_indexes[category] = {}
+        weightage_indexes[category]['beginIndex'] = category_first_idx
+        weightage_indexes[category]['endIndex'] = category_last_idx
+        weightage_indexes[category]['weight'] = weight
+    return weightage_indexes
+
+def calculate_cosine_similarity(row1, row2, weightage_indexes):
+    from sklearn.metrics.pairwise import cosine_similarity
+    total_cosine_similarity = 0
+
+    for category, index_value in weightage_indexes.iteritems():
+        total_cosine_similarity += index_value['weight'] * cosine_similarity(row1[index_value['beginIndex']:index_value['endIndex']].reshape(1,-1),row2[index_value['beginIndex']:index_value['endIndex']].reshape(1,-1))
     return total_cosine_similarity
 
+x=list()
+y=list()
+
 def compute_pairwise_cosine_similarity():
+    global x
+    global y
     num_files = lda_dataframe.shape[0]
     similarity_matrix = np.zeros((num_files,num_files))
+    weightage_indexes = calculate_begina_and_end_index()
+    print weightage_indexes
+    correct = 0
+    incorrect = 0
+    nearest_neighbour_data = {}
+
     for idx1,row1 in enumerate(lda_dataframe.itertuples()):
         row1 = np.asarray(row1[1:])
-        print 'pairwise'
         print row1
+        similarity = np.zeros(num_files)
+
         for idx2,row2 in enumerate(lda_dataframe.itertuples()):
-            if(idx2>idx1):
-                print 'computing similarity of ' + str(idx1) + ' ' + str(idx2)
-                row2 = np.asarray(row2[1:])
-                print row2
-                #Now need to calculate cosine distance between row 1 and row 2
-                similarity_matrix[idx1][idx2] = calculate_cosine_similarity(row1, row2)
-    return similarity_matrix
+            row2 = np.asarray(row2[1:])
+            #Now need to calculate cosine distance between row 1 and row 2
+            similarity[idx2] = calculate_cosine_similarity(row1, row2, weightage_indexes)
+
+        cases_indexes = np.array(similarity).argsort()[::-1][1:11]
+        cases = all_file_names[cases_indexes]
+
+        df,predicted_outcome = get_compare_case_outcomes(cases)
+        actual_outcome = get_file_outcome(all_file_names[idx1])
+
+        if actual_outcome == predicted_outcome:
+            correct = correct + 1
+        else:
+            incorrect = incorrect + 1
+
+        nearest_neighbour_data[idx1] = {
+                                       'query_file': all_file_names[idx1],
+                                       'similar_cases': cases,
+                                       'similar_case_outcomes' : df,
+                                       'cosine_similarity' : similarity[cases_indexes]
+                                      }
+        accuracy = (float(correct)*100)/float(idx1+1)
+        x.append(idx1)
+        y.append(accuracy)
+        print str(idx1) + " "+ str(correct) + " " + str(incorrect) + " " + str(accuracy)
+
+    return correct, incorrect, nearest_neighbour_data
+
 
 print 'Starting with similarities...'
 sm = compute_pairwise_cosine_similarity()

@@ -44,12 +44,16 @@ for root, dirs, files in os.walk('../data/circuit-scbd-mapped-files/', topdown=F
 
 dictionary = corpora.Dictionary(texts)
 dictionary.save('../data/lsi-dictionary.dict')  # store the dictionary, for future reference
+#dictionary.load('../best_lda/dictionary.dict')  # store the dictionary, for future reference
+
+
 
 my_corpus = [dictionary.doc2bow(text) for text in texts]
 corpora.MmCorpus.serialize('../data/lsi-corpus.mm', my_corpus)
 
 tfidf = models.TfidfModel(my_corpus)
 corpus_tfidf = tfidf[my_corpus]
+
 
 lda = models.LdaModel(corpus_tfidf, id2word=dictionary, num_topics=50)
 corpus_lda = lda[corpus_tfidf]
@@ -60,7 +64,7 @@ corpus_lsi_model = lsi_model[corpus_tfidf]
 lsi_model.print_topics()
 
 index_lsi = similarities.MatrixSimilarity(lsi_model[corpus_tfidf])
-index_lda = similarities.MatrixSimilarity(lda[corpus_tfidf])
+index_lda = similarities.MatrixSimilarity(lda[corpus])
 
 #----------- Testing the results of a single document
 res = pickle.load(open("/Users/shiv/.bin/10_scotus/data/circuit-scbd-mapped-files/X4AF96.p", "rb" ))

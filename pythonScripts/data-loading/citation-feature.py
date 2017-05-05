@@ -10,5 +10,3 @@ def generate_citations_merged_df(file):
 
 
 case_id_citations_merged.to_csv('../data/case_id_citations_merged.csv', encoding='utf-8')
-
-df.sum()

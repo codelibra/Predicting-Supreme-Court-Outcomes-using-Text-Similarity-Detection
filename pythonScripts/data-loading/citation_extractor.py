@@ -16,7 +16,7 @@ def get_citations_from_file(filename):
 
 count = 0
 citations_dict  = {}
-for root, dirs, files in os.walk('../data/circuit-scbd-mapped-files/', topdown=False):
+for root, dirs, files in os.walk('../data/circuit-scbd-mapped-files-complete/', topdown=False):
     for idx,name in enumerate(files):
         if ".p" in name:
             citations_dict[name] = get_citations_from_file(root+name)
@@ -35,9 +35,6 @@ for key,value in citations_dict.iteritems():
             citations_transpose[citation] = list()
         citations_transpose[citation].append(key)
 
-save_obj(citations_transpose, 'citations_transpose')
-save_obj(citations_dict, 'citations_dict')
-
 
 def save_obj(obj, name ):
     with open('../data/'+ name + '.pkl', 'wb') as f:
@@ -47,6 +44,8 @@ def load_obj(name):
     with open('../data/'+ name + '.pkl', 'rb') as f:
         return pickle.load(f)
 
+save_obj(citations_transpose_pruned, 'citations_transpose')
+save_obj(citations_dict, 'citations_dict')
 
 citations_dict = load_obj('citations_dict')
 citations_transpose = load_obj('citations_transpose')
@@ -66,7 +65,6 @@ def prune_citations():
 
 
 prune_citations()
-
 
 
 for key,value in citations_transpose_pruned.iteritems():

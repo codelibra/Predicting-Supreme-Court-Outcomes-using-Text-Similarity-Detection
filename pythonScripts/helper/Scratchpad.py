@@ -113,3 +113,11 @@ my_bigrams = nltk.bigrams(words)
 my_trigrams = nltk.trigrams(words)
 
 dict(my_bigrams)
+bom = pd.read_csv('../data/remove_data_unknown.csv')
+bom.shape
+
+sc_lc.shape
+
+bom.shape
+
+len(sc_lc['docket'])

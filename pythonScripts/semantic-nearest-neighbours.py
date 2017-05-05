@@ -1,5 +1,6 @@
-
+import pandas as pd
 sc_lc = pd.read_csv('../data/sc_lc.csv')
+
 
 
 # # Case similarity approach
@@ -146,3 +147,5 @@ accuracy = float(overall_correct)/float(overall_incorrect+overall_correct)
 
 
 print accuracy*100
+
+sims = index_lda[corpus[0]]
