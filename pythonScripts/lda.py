@@ -150,7 +150,7 @@ def get_compare_case_outcomes(cases):
     return neighbour_filename_outcome,outcome
 
 
-feature_weights = {'topic' : 1, 'citations' : 3, 'issue' : 10, 'issueArea' : 5, 'lawSupp': 8}
+feature_weights = {'topic' : 1, 'citations' : 20, 'issue' : 15, 'issueArea' : 5, 'lawSupp': 3}
 
 def calculate_begina_and_end_index():
     weightage_indexes = {}
@@ -164,14 +164,13 @@ def calculate_begina_and_end_index():
         weightage_indexes[category]['weight'] = weight
     return weightage_indexes
 
-def calculate_cosine_similarity(row1, lda_dataframe, weightage_indexes):
+def calculate_cosine_similarity(lda_dataframe, weightage_indexes):
     from sklearn.metrics.pairwise import cosine_similarity
-    total_cosine_similarity = np.zeros(lda_dataframe.shape[0]).reshape(1,-1)
+    total_cosine_similarity = np.zeros((lda_dataframe.shape[0],lda_dataframe.shape[0]))
 
 
     for category, index_value in weightage_indexes.iteritems():
-
-        total_cosine_similarity += index_value['weight'] * cosine_similarity(row1[index_value['beginIndex']:index_value['endIndex']].reshape(1,-1),
+        total_cosine_similarity += index_value['weight'] * cosine_similarity(lda_dataframe.ix[:,index_value['beginIndex']:index_value['endIndex']],
                           lda_dataframe.ix[:,index_value['beginIndex']:index_value['endIndex']])
     return total_cosine_similarity
 
@@ -188,13 +187,11 @@ def compute_pairwise_cosine_similarity():
     correct = 0
     incorrect = 0
     nearest_neighbour_data = {}
+    similarities = calculate_cosine_similarity(lda_dataframe, weightage_indexes)
 
     for idx1,row1 in enumerate(lda_dataframe.itertuples()):
-        row1 = np.asarray(row1[1:])
-        print row1
-        similarity = np.zeros(num_files)
-        similarity = calculate_cosine_similarity(row1, lda_dataframe, weightage_indexes)
-        cases_indexes = np.array(similarity[0,:]).argsort()[::-1][1:11]
+        similarity = similarities[idx1,:]
+        cases_indexes = np.array(similarity).argsort()[::-1][1:11]
         cases = all_file_names[cases_indexes]
 
         df,predicted_outcome = get_compare_case_outcomes(cases)
@@ -209,7 +206,7 @@ def compute_pairwise_cosine_similarity():
                                        'query_file': all_file_names[idx1],
                                        'similar_cases': cases,
                                        'similar_case_outcomes' : df,
-                                       'cosine_similarity' : similarity[0,:][cases_indexes]
+                                       'cosine_similarity' : similarity[cases_indexes]
                                       }
         accuracy = (float(correct)*100)/float(idx1+1)
         x.append(idx1)

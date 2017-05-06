@@ -9,8 +9,17 @@
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script src="https://rawgit.com/jasondavies/d3-cloud/master/build/d3.layout.cloud.js"></script>
 <script src="word-cloud-cases.js"></script>
+<script src="draw-graph.js"></script>
+<script src="jquery.connections.js"></script>
 <script>
 $( document ).ready(function() {
+
+var setupAllCasesData = function(allCasesText){
+}
+
+
+var setupCallBackHandlers = function() {
+  console.log("call back setup done!")
   $('.list-group-item').on('click', function() {
       var $this = $(this);
       var $alias = $this.data('alias');
@@ -36,7 +45,24 @@ $( document ).ready(function() {
       showNewWords(myWordCloud3);
       showNewWords(myWordCloud4);
       showNewWords(myWordCloud5);
-  })
+
+  });
+}
+
+	$.ajax({
+		  type: "POST",
+     	  url: "/cgi-bin/cgi_script.py",
+      	  data:
+					{ query: "file1",
+						relevanceFeedback : 1
+					},
+
+      	  success : function(data){
+            console.log(data.split(',')[0]);
+            setupCallBackHandlers();
+      	  }
+	});
+
 });
 </script>
 
@@ -44,8 +70,8 @@ $( document ).ready(function() {
 <body>
 
 <div>
- <div style="float: left; width: 250px;max-height:640px;overflow-y:scroll; " class="list-group">
-   <a class="list-group-item list-group-item-action flex-column align-items-start">
+ <div id="case-list" style="float: left; width: 250px;max-height:640px;overflow-y:scroll; " class="list-group">
+   <a id="test1" class="list-group-item list-group-item-action flex-column align-items-start">
      <div class="d-flex w-100 justify-content-between">
        <h5 class="mb-1">List group item heading</h5>
        <small>3 days ago</small>
@@ -113,15 +139,13 @@ $( document ).ready(function() {
    </a>
  </div>
 
- <div id="word-cloud" style="float: left; width: 200px;"></div>
- <div style="float: left; width: 100px;max-height:640px;" id="word-cloud1"></div>
- <div style="float: left; width: 100px;max-height:640px;" id="word-cloud2"></div>
+ <div id="word-cloud" style="float: left; width: 200px;">a</div>
+ <div style="float: left; width: 100px;max-height:640px;" id="word-cloud1">b</div>
+ <div style="float: left; width: 100px;max-height:640px;" id="word-cloud2">c</div>
 
  </div>
 
  <br style="clear: left;" />
 </div>
-
-
 
 </body>
