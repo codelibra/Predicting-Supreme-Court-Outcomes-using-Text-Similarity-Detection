@@ -121,3 +121,32 @@ sc_lc.shape
 bom.shape
 
 len(sc_lc['docket'])
+
+
+
+
+case_data = sc_lc[["year","docket","title", "citation"]]
+
+for col in sc_lc.columns:
+    print col
+
+
+case_data.to_csv('../data/case_ui_data.csv')
+case_data.drop_duplicates(inplace=True)
+
+
+
+casees = case_data.to_dict()
+
+
+
+ans = [ lda.show_topic(x) for x,y in lda_corpus[0]]
+
+ans  = [item for sublist in ans for item in sublist]
+
+ans = [x for x,y in sorted(ans, key=lambda x: x[1], reverse=True)[:3]]
+
+ans
+
+
+lda.show_topic(38)

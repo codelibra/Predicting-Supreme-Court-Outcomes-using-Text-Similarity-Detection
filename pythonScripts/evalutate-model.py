@@ -27,6 +27,8 @@ tf_idf = corpora.MmCorpus('../data/best_lda/tfidf-corpus.mm')
 
 
 
+
+
 x = list()
 y = list()
 

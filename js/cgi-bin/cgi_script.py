@@ -43,6 +43,7 @@ index_lda = similarities.MatrixSimilarity(lda_corpus)
 lda = models.LdaModel.load("/Users/shiv/.bin/10_scotus/data/best_lda/best_lda.model")
 dictionary =  Dictionary.load('/Users/shiv/.bin/10_scotus/data/best_lda/dictionary.dict')
 tf_idf = corpora.MmCorpus('/Users/shiv/.bin/10_scotus/data/best_lda/tfidf-corpus.mm')
+case_data = pd.read_csv('/Users/shiv/.bin/10_scotus/data/case_ui_data.csv')
 
 def get_top5_similar_document_indexes(index):
     sims = index_lda[lda_corpus[index]]
@@ -50,12 +51,21 @@ def get_top5_similar_document_indexes(index):
     return [x for x,y in sims[1:6]]
 
 def get_top_10_words_for_document(index):
-    sorted_tf_idf = sorted(tf_idf[index], key=lambda x: x[1], reverse=True)
-    return [dictionary[key] for key,value in sorted_tf_idf[:10]]
+    try:
+        sorted_tf_idf = sorted(tf_idf[index], key=lambda x: x[1], reverse=True)
+        return [dictionary[key] for key,value in sorted_tf_idf[:10]]
+    except:
+        return "Not found"
 
 def get_word_cloud_data(index):
     docIndexes = get_top5_similar_document_indexes(index)
     return [get_top_10_words_for_document(x) for x in docIndexes]
+
+def get_topic_of_document(index):
+    ans = [ lda.show_topic(x) for x,y in lda_corpus[index]]
+    ans  = [item for sublist in ans for item in sublist]
+    ans = [x for x,y in sorted(ans, key=lambda x: x[1], reverse=True)[:3]]
+    return ans
 
 
 def get_all_cases():
@@ -68,13 +78,15 @@ def get_all_cases():
     5. caseTerm
     '''
     data = {}
-    for idx,text in enumerate(words):
+    for index, row in case_data.iterrows():
         case = {}
-        case['caseName'] = caseNames[idx]
-        case['caseTopic'] = caseTopics[idx]
-        case['caseDescription'] = text
-        case['caseTerm'] = caseTerm[idx]
-        data[idx] = case
+        case['caseName'] = row['title']
+        case['caseTopic'] = " ".join(get_topic_of_document(index))
+        case['caseDescription'] = " ".join(get_top_10_words_for_document(index))
+        case['caseTerm'] = row['year']
+        data[index] = case
+        if index==100:
+            break
     return json.dumps(data)
 
 
@@ -100,7 +112,6 @@ def main(argv):
     form  = cgi.FieldStorage()
     query = form.getvalue('query')
     caseId = int(form.getvalue('caseId'))
-
     try:
         opts, args = getopt.getopt(argv,"q:r:")
     except getopt.GetoptError:
