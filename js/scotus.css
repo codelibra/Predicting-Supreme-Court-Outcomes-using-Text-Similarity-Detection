@@ -5,6 +5,8 @@
   flex: 1; /*grow*/
 }
 
+h3 { color: #7c795d; font-family: 'Trocchi', serif; font-size: 45px; font-weight: normal; line-height: 48px; margin: 0; }
+
 
 
 #svgContainer {
@@ -14,6 +16,17 @@
 }
 
 
+.centered {
+text-align:center
+  }
+
+.bordered {
+border-radius: 25px;
+    border: 2px solid #73AD21;
+    padding: 20px;
+    width: 200px;
+    height: 150px;
+  }
 
 #outer{
 	margin:0 auto;

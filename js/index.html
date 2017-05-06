@@ -16,13 +16,35 @@ $( document ).ready(function() {
 var pushCaseElement= function(caseName, caseDescription, caseTopic, caseTerm) {
 
   var anchor = $('<a/>').addClass('list-group-item list-group-item-action flex-column align-items-start');
-  var h5 = $('<h3/>').addClass('mb-1').text(caseName);
-  var div1 = $('<div/>').addClass('d-flex w-100 justify-content-between');
-  var p = $('<p/>').addClass('mb-1').text(caseDescription.split(' ').splice(0, 15).join(' '));
-  var small1 = $('<small/>').text(caseTopic);
-  var small2 = $('<small/>').text("Term " + caseTerm);
 
-  $(div1).append(h5);
+  var splitCaseName = function(caseName){
+    console.log(caseName);
+    caseNameA = caseName.substring(0, caseName.indexOf("v.")-1);
+    caseNameB = caseName.substring(caseName.indexOf("v.")+2, caseName.indexOf("U.S.")-5);
+    caseNameCite = caseName.substring(caseName.indexOf("U.S.")-5, caseName.length);
+    return [caseNameA, caseNameB, caseNameCite]
+  }
+
+  var ans = splitCaseName(caseName)
+  var caseNameA = ans[0]
+  var caseNameB = ans[1]
+  var caseNameCite = ans[2]
+
+  var h51 = $('<h4/>').addClass('mb-1').text(caseNameA);
+  var h52 = $('<h5/>').addClass('mb-1').text(" V ");
+  var h53 = $('<h4/>').addClass('mb-1').text(caseNameB);
+  var citation = $('<h5/>').addClass('mb-1').text(caseNameCite);
+
+  var div1 = $('<div/>').addClass('d-flex w-100 justify-content-between');
+  var p = $('<p/>').addClass('mb-1 bordered').text(caseDescription.split(' ').splice(0, 15).join(' '));
+  var small1 = $('<small/>').addClass('centered').text(caseTopic);
+  var small2 = $('<small>').text("Term " + caseTerm);
+
+  $(div1).append(h51);
+  $(div1).append(h52);
+  $(div1).append(h53);
+  $(div1).append(citation);
+
   $(div1).append(small1);
   $(anchor).append(div1);
   $(anchor).append(p);
@@ -97,7 +119,7 @@ var setupCallBackHandlers = function() {
       	  success : function(data){
 
             var obj = jQuery.parseJSON( data );
-            
+
             setupAllCasesData(obj);
             setupCallBackHandlers();
       	  }
