@@ -19,7 +19,7 @@ var pushCaseElement= function(caseName, caseDescription, caseTopic, caseTerm) {
   var anchor = $('<a/>').addClass('list-group-item list-group-item-action flex-column align-items-start');
   var h5 = $('<h3/>').addClass('mb-1').text(caseName);
   var div1 = $('<div/>').addClass('d-flex w-100 justify-content-between');
-  var p = $('<p/>').addClass('mb-1').text(caseDescription);
+  var p = $('<p/>').addClass('mb-1').text(caseDescription.split(' ').splice(0, 15).join(' '));
   var small1 = $('<small/>').text(caseTopic);
   var small2 = $('<small/>').text("Term " + caseTerm);
 
@@ -45,6 +45,7 @@ var setupCallBackHandlers = function() {
   $('.list-group-item').on('click', function() {
       var $this = $(this);
       var $alias = $this.data('alias');
+      clickedCaseId =  $this.index()
 
       $('.active').removeClass('active');
       $this.toggleClass('active')
@@ -61,25 +62,44 @@ var setupCallBackHandlers = function() {
       var myWordCloud3 = wordCloud('#word-cloud1',800,200,700,100);
       var myWordCloud4 = wordCloud('#word-cloud2',800,200,300,100);
       var myWordCloud5 = wordCloud('#word-cloud1',800,200,700,120);
-      showNewWords(myWordCloud);
-      showNewWords(myWordCloud1);
-      showNewWords(myWordCloud2);
-      showNewWords(myWordCloud3);
-      showNewWords(myWordCloud4);
-      showNewWords(myWordCloud5);
+
+      $.ajax({
+    		  type: "POST",
+         	  url: "/cgi-bin/cgi_script.py?-q=test",
+          	  data:
+    					{
+    						caseId : clickedCaseId
+    					},
+
+          	  success : function(data){
+                console.log(data);
+                var obj = jQuery.parseJSON( data );
+                console.log(obj);
+
+                showNewWords(myWordCloud, obj['original']);
+                showNewWords(myWordCloud1, obj['case1']);
+                showNewWords(myWordCloud2, obj['case2']);
+                showNewWords(myWordCloud3, obj['case3']);
+                showNewWords(myWordCloud4, obj['case4']);
+                showNewWords(myWordCloud5, obj['case5']);
+
+          	  }
+    	});
 
   });
 }
 
 	$.ajax({
 		  type: "POST",
-     	  url: "/cgi-bin/cgi_script.py",
+     	  url: "/cgi-bin/cgi_script.py?-q=test",
       	  data:
-					{ query: "file1",
-						relevanceFeedback : 1
+					{
+            query: "getAllCases",
+						caseId : 1
 					},
 
       	  success : function(data){
+            console.log(data);
             var obj = jQuery.parseJSON( data );
             console.log(obj);
             setupAllCasesData(obj);
@@ -94,12 +114,12 @@ var setupCallBackHandlers = function() {
 <body>
 
 <div>
- <div id="case-list" style="float: left; width: 250px;max-height:700px;overflow-y:scroll; " class="list-group">
+ <div id="case-list" style="float: left; width: 250px;max-height:680px;overflow-y:scroll; " class="list-group">
  </div>
 
- <div id="word-cloud" style="float: left; width: 200px;">a</div>
- <div style="float: left; width: 100px;max-height:640px;" id="word-cloud1">b</div>
- <div style="float: left; width: 100px;max-height:640px;" id="word-cloud2">c</div>
+ <div id="word-cloud" style="float: left; width: 200px;"></div>
+ <div style="float: left; width: 100px;max-height:640px;" id="word-cloud1"></div>
+ <div style="float: left; width: 100px;max-height:640px;" id="word-cloud2"></div>
 
  </div>
 

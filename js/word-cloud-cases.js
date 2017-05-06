@@ -71,31 +71,10 @@
 
   }
 
-
-var words1 =
-"You don't know about me without you have read a book called The Adventures of Tom Sawyer but that ain't no matter. The boy with fair hair lowered himself down the last few feet of rock and began to pick his way toward the lagoon. When Mr. Bilbo Baggins of Bag End announced that he would shortly be celebrating his eleventy-first birthday with a party of special magnificence, there was much talk and excitement in Hobbiton. It was inevitable: the scent of bitter almonds always reminded him of the fate of unrequited love.";
-
-var words2=
-"You don't know about me without you have read a book called The Adventures of Tom Sawyer but that ain't no matter. The boy with fair hair lowered himself down the last few feet of rock and began to pick his way toward the lagoon. When Mr. Bilbo Baggins of Bag End announced that he would shortly be celebrating his eleventy-first birthday with a party of special magnificence, there was much talk and excitement in Hobbiton. It was inevitable: the scent of bitter almonds always reminded him of the fate of unrequited love.";
-
-var words3 =
-"You don't know about me without you have read a book called The Adventures of Tom Sawyer but that ain't no matter. The boy with fair hair lowered himself down the last few feet of rock and began to pick his way toward the lagoon. When Mr. Bilbo Baggins of Bag End announced that he would shortly be celebrating his eleventy-first birthday with a party of special magnificence, there was much talk and excitement in Hobbiton. It was inevitable: the scent of bitter almonds always reminded him of the fate of unrequited love.";
-
-var words4 =
-"You don't know about me without you have read a book called The Adventures of Tom Sawyer but that ain't no matter. The boy with fair hair lowered himself down the last few feet of rock and began to pick his way toward the lagoon. When Mr. Bilbo Baggins of Bag End announced that he would shortly be celebrating his eleventy-first birthday with a party of special magnificence, there was much talk and excitement in Hobbiton. It was inevitable: the scent of bitter almonds always reminded him of the fate of unrequited love.";
-
-var words5 =
-"You don't know about me without you have read a book called The Adventures of Tom Sawyer but that ain't no matter. The boy with fair hair lowered himself down the last few feet of rock and began to pick his way toward the lagoon. When Mr. Bilbo Baggins of Bag End announced that he would shortly be celebrating his eleventy-first birthday with a party of special magnificence, there was much talk and excitement in Hobbiton. It was inevitable: the scent of bitter almonds always reminded him of the fate of unrequited love.";
-
-var words6 =
-"You don't know about me without you have read a book called The Adventures of Tom Sawyer but that ain't no matter. The boy with fair hair lowered himself down the last few feet of rock and began to pick his way toward the lagoon. When Mr. Bilbo Baggins of Bag End announced that he would shortly be celebrating his eleventy-first birthday with a party of special magnificence, there was much talk and excitement in Hobbiton. It was inevitable: the scent of bitter almonds always reminded him of the fate of unrequited love.";
-
-
-
   //Prepare one of the sample sentences by removing punctuation,
   // creating an array of words and computing a random size attribute.
-  function getWords() {
-      return words1
+  function getWords(words) {
+      return words
               .replace(/[!\.,:;\?]/g, '')
               .split(' ')
               .map(function(d) {
@@ -106,6 +85,6 @@ var words6 =
   //This method tells the word cloud to redraw with a new set of words.
   //In reality the new words would probably come from a server request,
   // user input or some other source.
-  function showNewWords(vis) {
-      vis.update(getWords())
+  function showNewWords(vis, words) {
+      vis.update(getWords(words))
   }
