@@ -9,8 +9,7 @@
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script src="https://rawgit.com/jasondavies/d3-cloud/master/build/d3.layout.cloud.js"></script>
 <script src="word-cloud-cases.js"></script>
-<script src="draw-graph.js"></script>
-<script src="jquery.connections.js"></script>
+
 <script>
 $( document ).ready(function() {
 
@@ -82,7 +81,6 @@ var setupCallBackHandlers = function() {
                 showNewWords(myWordCloud3, obj['case3']);
                 showNewWords(myWordCloud4, obj['case4']);
                 showNewWords(myWordCloud5, obj['case5']);
-
           	  }
     	});
 
@@ -113,6 +111,7 @@ var setupCallBackHandlers = function() {
 </head>
 <body>
 
+
 <div>
  <div id="case-list" style="float: left; width: 250px;max-height:680px;overflow-y:scroll; " class="list-group">
  </div>
@@ -120,10 +119,11 @@ var setupCallBackHandlers = function() {
  <div id="word-cloud" style="float: left; width: 200px;"></div>
  <div style="float: left; width: 100px;max-height:640px;" id="word-cloud1"></div>
  <div style="float: left; width: 100px;max-height:640px;" id="word-cloud2"></div>
-
  </div>
-
  <br style="clear: left;" />
 </div>
+
+
+
 
 </body>

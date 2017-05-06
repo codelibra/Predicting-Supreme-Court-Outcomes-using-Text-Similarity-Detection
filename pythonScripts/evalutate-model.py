@@ -23,6 +23,10 @@ index_lda = similarities.MatrixSimilarity(lda_corpus)
 lda = models.LdaModel.load("../data/best_lda/best_lda.model")
 dictionary =  Dictionary.load('../data/best_lda/dictionary.dict')
 
+tf_idf = corpora.MmCorpus('../data/best_lda/tfidf-corpus.mm')
+
+
+
 x = list()
 y = list()
 

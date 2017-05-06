@@ -4,3 +4,59 @@
 .container > div {
   flex: 1; /*grow*/
 }
+
+
+
+#svgContainer {
+	z-index: -10;
+	position:absolute;
+	opacity: 0.5;
+}
+
+
+
+#outer{
+	margin:0 auto;
+	width: 80%;
+}
+
+#cloud{
+ 	width: 6em;
+ 	height: 6em;
+ 	background-color:teal;
+ 	margin-left: 10%;
+}
+#cloud1{
+	height: 4em;
+	width: 35%;
+	padding: 2em 8em;
+	margin-left: 8em;
+	margin-top: 6em;
+	background-color: orange;
+}
+
+#red{
+	width:6em;
+	height: 4em;
+	margin-left: 30%;
+	padding:4em 3em;
+	background-color:red;
+}
+#aqua{
+	width: 5em;
+	height: 5em;
+	margin-left:15%;
+	background-color:aqua;
+}
+#purple{
+	width: 15em;
+	height: 5em;
+	background-color:purple;
+}
+#green{
+	width: 5em;
+	height: 7em;
+	margin-top: 2em;
+	margin-left: 50%;
+	background-color: green;
+}

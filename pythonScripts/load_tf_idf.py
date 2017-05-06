@@ -1,5 +1,5 @@
 from sklearn.feature_extraction.text import TfidfVectorizer
-files = [os.path.join('../data/circuit-scbd-mapped-files/',f) for f in os.listdir('../data/circuit-scbd-mapped-files/')]
+files = [os.path.join('../data/circuit-scbd-mapped-files-complete/',f) for f in os.listdir('../data/circuit-scbd-mapped-files-complete/')]
 model = TfidfVectorizer(ngram_range=(1, 3), min_df=0, stop_words='english')
 tf_idf = model.fit_transform(files)
 
