@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 <head>
+<link rel="stylesheet" href="scotus.css">
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js "></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
@@ -17,82 +18,113 @@ $( document ).ready(function() {
       $('.active').removeClass('active');
       $this.toggleClass('active')
       $('#word-cloud').html('');
+      $('#word-cloud1').html('');
+      $('#word-cloud2').html('');
+      $('#word-cloud3').html('');
+      $('#word-cloud4').html('');
+      $('#word-cloud5').html('');
 
-      var myWordCloud = wordCloud('#word-cloud');
+      var myWordCloud = wordCloud('#word-cloud',400,600,100,300);
+      var myWordCloud1 = wordCloud('#word-cloud1',800,600,700,100);
+      var myWordCloud2 = wordCloud('#word-cloud2',800,600,700,150);
+      var myWordCloud3 = wordCloud('#word-cloud3',800,600,700,200);
+      var myWordCloud4 = wordCloud('#word-cloud4',800,600,700,250);
+      var myWordCloud5 = wordCloud('#word-cloud5',800,600,700,300);
       showNewWords(myWordCloud);
+      showNewWords(myWordCloud1);
+      showNewWords(myWordCloud2);
+      showNewWords(myWordCloud3);
+      showNewWords(myWordCloud4);
+      showNewWords(myWordCloud5);
   })
 });
 </script>
 
 </head>
 <body>
-<div id="word-cloud" style="float:right"></div>
-<div data-spy="scroll"  class="list-group" style="width:300px;max-height:1000px;overflow-y:scroll;">
-  <a class="list-group-item list-group-item-action flex-column align-items-start">
-    <div class="d-flex w-100 justify-content-between">
-      <h5 class="mb-1">List group item heading</h5>
-      <small>3 days ago</small>
-    </div>
-    <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
-    <small>Donec id elit non mi porta.</small>
-  </a>
-  <a class="list-group-item list-group-item-action flex-column align-items-start">
-    <div class="d-flex w-100 justify-content-between">
-      <h5 class="mb-1">List group item heading</h5>
-      <small>3 days ago</small>
-    </div>
-    <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
-    <small>Donec id elit non mi porta.</small>
-  </a>
 
-  <a class="list-group-item list-group-item-action flex-column align-items-start">
-    <div class="d-flex w-100 justify-content-between">
-      <h5 class="mb-1">List group item heading</h5>
-      <small class="text-muted">3 days ago</small>
-    </div>
-    <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
-    <small class="text-muted">Donec id elit non mi porta.</small>
-  </a>
-  <a class="list-group-item list-group-item-action flex-column align-items-start">
-    <div class="d-flex w-100 justify-content-between">
-      <h5 class="mb-1">List group item heading</h5>
-      <small class="text-muted">3 days ago</small>
-    </div>
-    <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
-    <small class="text-muted">Donec id elit non mi porta.</small>
-  </a>
-  <a class="list-group-item list-group-item-action flex-column align-items-start">
-    <div class="d-flex w-100 justify-content-between">
-      <h5 class="mb-1">List group item heading</h5>
-      <small>3 days ago</small>
-    </div>
-    <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
-    <small>Donec id elit non mi porta.</small>
-  </a>
-  <a class="list-group-item list-group-item-action flex-column align-items-start">
-    <div class="d-flex w-100 justify-content-between">
-      <h5 class="mb-1">List group item heading</h5>
-      <small>3 days ago</small>
-    </div>
-    <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
-    <small>Donec id elit non mi porta.</small>
-  </a>
+<div>
+ <div style="float: left; width: 250px;max-height:640px;overflow-y:scroll; " class="list-group">
+   <a class="list-group-item list-group-item-action flex-column align-items-start">
+     <div class="d-flex w-100 justify-content-between">
+       <h5 class="mb-1">List group item heading</h5>
+       <small>3 days ago</small>
+     </div>
+     <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+     <small>Donec id elit non mi porta.</small>
+   </a>
+   <a class="list-group-item list-group-item-action flex-column align-items-start">
+     <div class="d-flex w-100 justify-content-between">
+       <h5 class="mb-1">List group item heading</h5>
+       <small>3 days ago</small>
+     </div>
+     <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+     <small>Donec id elit non mi porta.</small>
+   </a>
 
-  <a class="list-group-item list-group-item-action flex-column align-items-start">
-    <div class="d-flex w-100 justify-content-between">
-      <h5 class="mb-1">List group item heading</h5>
-      <small class="text-muted">3 days ago</small>
-    </div>
-    <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
-    <small class="text-muted">Donec id elit non mi porta.</small>
-  </a>
-  <a class="list-group-item list-group-item-action flex-column align-items-start">
-    <div class="d-flex w-100 justify-content-between">
-      <h5 class="mb-1">List group item heading</h5>
-      <small class="text-muted">3 days ago</small>
-    </div>
-    <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
-    <small class="text-muted">Donec id elit non mi porta.</small>
-  </a>
+   <a class="list-group-item list-group-item-action flex-column align-items-start">
+     <div class="d-flex w-100 justify-content-between">
+       <h5 class="mb-1">List group item heading</h5>
+       <small class="text-muted">3 days ago</small>
+     </div>
+     <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+     <small class="text-muted">Donec id elit non mi porta.</small>
+   </a>
+   <a class="list-group-item list-group-item-action flex-column align-items-start">
+     <div class="d-flex w-100 justify-content-between">
+       <h5 class="mb-1">List group item heading</h5>
+       <small class="text-muted">3 days ago</small>
+     </div>
+     <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+     <small class="text-muted">Donec id elit non mi porta.</small>
+   </a>
+   <a class="list-group-item list-group-item-action flex-column align-items-start">
+     <div class="d-flex w-100 justify-content-between">
+       <h5 class="mb-1">List group item heading</h5>
+       <small>3 days ago</small>
+     </div>
+     <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+     <small>Donec id elit non mi porta.</small>
+   </a>
+   <a class="list-group-item list-group-item-action flex-column align-items-start">
+     <div class="d-flex w-100 justify-content-between">
+       <h5 class="mb-1">List group item heading</h5>
+       <small>3 days ago</small>
+     </div>
+     <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+     <small>Donec id elit non mi porta.</small>
+   </a>
+
+   <a class="list-group-item list-group-item-action flex-column align-items-start">
+     <div class="d-flex w-100 justify-content-between">
+       <h5 class="mb-1">List group item heading</h5>
+       <small class="text-muted">3 days ago</small>
+     </div>
+     <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+     <small class="text-muted">Donec id elit non mi porta.</small>
+   </a>
+   <a class="list-group-item list-group-item-action flex-column align-items-start">
+     <div class="d-flex w-100 justify-content-between">
+       <h5 class="mb-1">List group item heading</h5>
+       <small class="text-muted">3 days ago</small>
+     </div>
+     <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+     <small class="text-muted">Donec id elit non mi porta.</small>
+   </a>
+ </div>
+
+ <div id="word-cloud" style="float: left; width: 200px;"></div>
+ <div style="float: left; width: 100px;max-height:640px;">
+  <div id="word-cloud1"></div>
+  <div id="word-cloud2"></div>
+  <div id="word-cloud3"></div>
+  <div id="word-cloud4"></div>
+  <div id="word-cloud5"></div>
+ </div>
+
+ <br style="clear: left;" />
 </div>
+
+
+
 </body>

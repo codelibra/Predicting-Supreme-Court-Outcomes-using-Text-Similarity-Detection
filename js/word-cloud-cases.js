@@ -3,16 +3,16 @@
   //Based on https://github.com/jasondavies/d3-cloud/blob/master/examples/simple.html
 
   // Encapsulate the word cloud functionality
-  function wordCloud(selector) {
+  function wordCloud(selector,a,b,c,d) {
 
       var fill = d3.scale.category20();
 
       //Construct the word cloud's SVG element
       var svg = d3.select(selector).append("svg")
-          .attr("width", 1050)
-          .attr("height", 800)
+          .attr("width", a)
+          .attr("height", b)
           .append("g")
-          .attr("transform", "translate(300,300)");
+          .attr("transform", "translate("+c+","+d+")");
 
 
       //Draw the word cloud
