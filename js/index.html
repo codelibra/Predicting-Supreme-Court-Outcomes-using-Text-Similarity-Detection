@@ -14,7 +14,29 @@
 <script>
 $( document ).ready(function() {
 
-var setupAllCasesData = function(allCasesText){
+var pushCaseElement= function(caseName, caseDescription, caseTopic, caseTerm) {
+
+  var anchor = $('<a/>').addClass('list-group-item list-group-item-action flex-column align-items-start');
+  var h5 = $('<h3/>').addClass('mb-1').text(caseName);
+  var div1 = $('<div/>').addClass('d-flex w-100 justify-content-between');
+  var p = $('<p/>').addClass('mb-1').text(caseDescription);
+  var small1 = $('<small/>').text(caseTopic);
+  var small2 = $('<small/>').text("Term " + caseTerm);
+
+  $(div1).append(h5);
+  $(div1).append(small1);
+  $(anchor).append(div1);
+  $(anchor).append(p);
+  $(anchor).append(small2);
+  anchor.appendTo('#case-list');
+
+}
+
+var setupAllCasesData = function(allCases){
+  for (var key in allCases) {
+    console.log(allCases[key]);
+    pushCaseElement(allCases[key]['caseName'], allCases[key]['caseDescription'], allCases[key]['caseTopic'], allCases[key]['caseTerm'])
+  }
 }
 
 
@@ -58,7 +80,9 @@ var setupCallBackHandlers = function() {
 					},
 
       	  success : function(data){
-            console.log(data.split(',')[0]);
+            var obj = jQuery.parseJSON( data );
+            console.log(obj);
+            setupAllCasesData(obj);
             setupCallBackHandlers();
       	  }
 	});
@@ -70,73 +94,7 @@ var setupCallBackHandlers = function() {
 <body>
 
 <div>
- <div id="case-list" style="float: left; width: 250px;max-height:640px;overflow-y:scroll; " class="list-group">
-   <a id="test1" class="list-group-item list-group-item-action flex-column align-items-start">
-     <div class="d-flex w-100 justify-content-between">
-       <h5 class="mb-1">List group item heading</h5>
-       <small>3 days ago</small>
-     </div>
-     <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
-     <small>Donec id elit non mi porta.</small>
-   </a>
-   <a class="list-group-item list-group-item-action flex-column align-items-start">
-     <div class="d-flex w-100 justify-content-between">
-       <h5 class="mb-1">List group item heading</h5>
-       <small>3 days ago</small>
-     </div>
-     <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
-     <small>Donec id elit non mi porta.</small>
-   </a>
-
-   <a class="list-group-item list-group-item-action flex-column align-items-start">
-     <div class="d-flex w-100 justify-content-between">
-       <h5 class="mb-1">List group item heading</h5>
-       <small class="text-muted">3 days ago</small>
-     </div>
-     <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
-     <small class="text-muted">Donec id elit non mi porta.</small>
-   </a>
-   <a class="list-group-item list-group-item-action flex-column align-items-start">
-     <div class="d-flex w-100 justify-content-between">
-       <h5 class="mb-1">List group item heading</h5>
-       <small class="text-muted">3 days ago</small>
-     </div>
-     <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
-     <small class="text-muted">Donec id elit non mi porta.</small>
-   </a>
-   <a class="list-group-item list-group-item-action flex-column align-items-start">
-     <div class="d-flex w-100 justify-content-between">
-       <h5 class="mb-1">List group item heading</h5>
-       <small>3 days ago</small>
-     </div>
-     <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
-     <small>Donec id elit non mi porta.</small>
-   </a>
-   <a class="list-group-item list-group-item-action flex-column align-items-start">
-     <div class="d-flex w-100 justify-content-between">
-       <h5 class="mb-1">List group item heading</h5>
-       <small>3 days ago</small>
-     </div>
-     <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
-     <small>Donec id elit non mi porta.</small>
-   </a>
-
-   <a class="list-group-item list-group-item-action flex-column align-items-start">
-     <div class="d-flex w-100 justify-content-between">
-       <h5 class="mb-1">List group item heading</h5>
-       <small class="text-muted">3 days ago</small>
-     </div>
-     <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
-     <small class="text-muted">Donec id elit non mi porta.</small>
-   </a>
-   <a class="list-group-item list-group-item-action flex-column align-items-start">
-     <div class="d-flex w-100 justify-content-between">
-       <h5 class="mb-1">List group item heading</h5>
-       <small class="text-muted">3 days ago</small>
-     </div>
-     <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
-     <small class="text-muted">Donec id elit non mi porta.</small>
-   </a>
+ <div id="case-list" style="float: left; width: 250px;max-height:700px;overflow-y:scroll; " class="list-group">
  </div>
 
  <div id="word-cloud" style="float: left; width: 200px;">a</div>
