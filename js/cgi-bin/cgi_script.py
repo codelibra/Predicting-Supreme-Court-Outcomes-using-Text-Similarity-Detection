@@ -1,16 +1,9 @@
 #!/usr/bin/env python
 import cgi,cgitb
 import json
+import sys,getopt
 cgitb.enable()
 
-# create the result html file
-from subprocess import call
-call(["touch", "action_page.html"])
-
-# concatenate user query to this cmd to pass to search.py
-form  = cgi.FieldStorage()
-query = form.getvalue('query')
-relevanceFeedback = form.getvalue('relevanceFeedback')
 
 words1 = "You don't know about me without you have read a book called The Adventures of Tom Sawyer but that ain't no matter. The boy with fair hair lowered himself down the last few feet of rock and began to pick his way toward the lagoon. When Mr. Bilbo Baggins of Bag End announced that he would shortly be celebrating his eleventy-first birthday with a party of special magnificence, there was much talk and excitement in Hobbiton. It was inevitable: the scent of bitter almonds always reminded him of the fate of unrequited love."
 
@@ -47,9 +40,50 @@ def get_all_cases():
         data[idx] = case
     return json.dumps(data)
 
-data = ["this is one hell of a script", "let's c what happens", "click and render", "hell yeahhh!"]
-print "Content-type: text\n\n"
-print get_all_cases()
+
+def get_similar_case_text(id):
+    '''
+    Given a particular caseId the function would return text of 5 nearest neighbours.
+    '''
+    similar_cases = {}
+    similar_cases['original'] = words[int(id)]
+    similar_cases['case1']= words1
+    similar_cases['case2']= words2
+    similar_cases['case3']= words3
+    similar_cases['case4']= words4
+    similar_cases['case5']= words5
+
+    return json.dumps(similar_cases)
+
+
+
+def main(argv):
+    try:
+        opts, args = getopt.getopt(argv,"q:r:")
+    except getopt.GetoptError:
+        sys.exit()
+
+
+    for opt, arg in opts:
+        if opt in ("-q"):
+            query = arg
+        else:
+            query = -1
+
+        if opt in ("-r"):
+            caseId = int(arg)
+
+
+    print "Content-type: text\n\n"
+
+    if query!=-1:
+        print get_all_cases()
+    else:
+        print get_similar_case_text(caseId)
+
+if  __name__ =='__main__':
+    main(sys.argv[1:])
+
 
 # what should the script do?
 #couple of functions are requrired ,
