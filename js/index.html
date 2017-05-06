@@ -25,11 +25,11 @@ $( document ).ready(function() {
       $('#word-cloud5').html('');
 
       var myWordCloud = wordCloud('#word-cloud',400,600,100,300);
-      var myWordCloud1 = wordCloud('#word-cloud1',800,600,700,100);
-      var myWordCloud2 = wordCloud('#word-cloud2',800,600,700,150);
-      var myWordCloud3 = wordCloud('#word-cloud3',800,600,700,200);
-      var myWordCloud4 = wordCloud('#word-cloud4',800,600,700,250);
-      var myWordCloud5 = wordCloud('#word-cloud5',800,600,700,300);
+      var myWordCloud1 = wordCloud('#word-cloud1',800,200,700,100);
+      var myWordCloud2 = wordCloud('#word-cloud2',800,300,300,150);
+      var myWordCloud3 = wordCloud('#word-cloud1',800,200,700,100);
+      var myWordCloud4 = wordCloud('#word-cloud2',800,200,300,100);
+      var myWordCloud5 = wordCloud('#word-cloud1',800,200,700,120);
       showNewWords(myWordCloud);
       showNewWords(myWordCloud1);
       showNewWords(myWordCloud2);
@@ -114,12 +114,9 @@ $( document ).ready(function() {
  </div>
 
  <div id="word-cloud" style="float: left; width: 200px;"></div>
- <div style="float: left; width: 100px;max-height:640px;">
-  <div id="word-cloud1"></div>
-  <div id="word-cloud2"></div>
-  <div id="word-cloud3"></div>
-  <div id="word-cloud4"></div>
-  <div id="word-cloud5"></div>
+ <div style="float: left; width: 100px;max-height:640px;" id="word-cloud1"></div>
+ <div style="float: left; width: 100px;max-height:640px;" id="word-cloud2"></div>
+
  </div>
 
  <br style="clear: left;" />
