@@ -12,7 +12,7 @@ h3 { color: #7c795d; font-family: 'Trocchi', serif; font-size: 45px; font-weight
    top: 250px;
    left: 430px;
    width: 10%;
-   font: normal small-caps normal 16px/1.4 Georgia;
+   font: normal small-caps normal 13px/1.4 Georgia;
 }
 
 .fixed-case1 {
@@ -20,7 +20,7 @@ h3 { color: #7c795d; font-family: 'Trocchi', serif; font-size: 45px; font-weight
    top: 120px;
    left: 640px;
    width: 10%;
-   font: normal small-caps normal 16px/1.4 Georgia;
+   font: normal small-caps normal 13px/1.4 Georgia;
 }
 
 .fixed-case2 {
@@ -28,7 +28,7 @@ h3 { color: #7c795d; font-family: 'Trocchi', serif; font-size: 45px; font-weight
    top: 400px;
    left: 640px;
    width: 10%;
-   font: normal small-caps normal 16px/1.4 Georgia;
+   font: normal small-caps normal 13px/1.4 Georgia;
 }
 
 .fixed-case3 {
@@ -36,7 +36,7 @@ h3 { color: #7c795d; font-family: 'Trocchi', serif; font-size: 45px; font-weight
    top: 60px;
    left: 980px;
    width: 10%;
-   font: normal small-caps normal 16px/1.4 Georgia;
+   font: normal small-caps normal 13px/1.4 Georgia;
 }
 
 .fixed-case4 {
@@ -44,7 +44,7 @@ h3 { color: #7c795d; font-family: 'Trocchi', serif; font-size: 45px; font-weight
    top: 250px;
    left: 980px;
    width: 10%;
-   font: normal small-caps normal 16px/1.4 Georgia;
+   font: normal small-caps normal 13px/1.4 Georgia;
 }
 
 
@@ -53,7 +53,7 @@ h3 { color: #7c795d; font-family: 'Trocchi', serif; font-size: 45px; font-weight
    top: 500px;
    left: 980px;
    width: 10%;
-   font: normal small-caps normal 16px/1.4 Georgia;
+   font: normal small-caps normal 13px/1.4 Georgia;
 }
 
 .tags {

@@ -20,17 +20,19 @@ import numpy as np
 import pyLDAvis.gensim
 from gensim.models import LdaModel
 
-lda_corpus = corpora.MmCorpus('/Users/shiv/.bin/10_scotus/data/best_lda/lda-corpus.mm')
-index_lda = similarities.MatrixSimilarity(lda_corpus)
-lda = models.LdaModel.load("/Users/shiv/.bin/10_scotus/data/best_lda/best_lda.model")
-dictionary =  Dictionary.load('/Users/shiv/.bin/10_scotus/data/best_lda/dictionary.dict')
-tf_idf = corpora.MmCorpus('/Users/shiv/.bin/10_scotus/data/best_lda/tfidf-corpus.mm')
+similarities = np.load("/Users/shiv/.bin/10_scotus/data/final model d/cosine_similarity.npy")
+lda_corpus = corpora.MmCorpus('/Users/shiv/.bin/10_scotus/data/final model d/lda-corpus.mm')
+lda = models.LdaModel.load("/Users/shiv/.bin/10_scotus/data/final model d/best_lda.model")
+dictionary =  Dictionary.load('/Users/shiv/.bin/10_scotus/data/final model d/dictionary.dict')
+tf_idf = corpora.MmCorpus('/Users/shiv/.bin/10_scotus/data/final model d/tfidf-corpus.mm')
 case_data = pd.read_csv('/Users/shiv/.bin/10_scotus/data/case_ui_data.csv')
 
 def get_top5_similar_document_indexes(index):
-    sims = index_lda[lda_corpus[index]]
-    sims = sorted(enumerate(sims), key=lambda item: -item[1])
-    return [x for x,y in sims[1:6]]
+    similarity = similarities[index,:]
+    cases_indexes = np.array(similarity).argsort()[::-1][1:6]
+    #sims = index_lda[lda_corpus[index]]
+    #sims = sorted(enumerate(sims), key=lambda item: -item[1])
+    return cases_indexes.tolist()
 
 def get_top_10_words_for_document(index):
     try:
@@ -44,11 +46,11 @@ def get_word_cloud_data(index):
     return [get_top_10_words_for_document(x) for x in docIndexes], docIndexes
 
 def get_topic_of_document(index):
-    ans = [ lda.show_topic(x) for x,y in lda_corpus[index]]
+    best_topics = sorted(lda_corpus[index], key=lambda x: x[1], reverse=True)[:3]
+    ans = [ lda.show_topic(x) for x,y in best_topics]
     ans  = [item for sublist in ans for item in sublist]
     ans = [x for x,y in sorted(ans, key=lambda x: x[1], reverse=True)[:3]]
     return ans
-
 
 def get_all_cases():
     '''
@@ -94,7 +96,6 @@ def get_similar_case_text(id):
 
 
 def main(argv):
-
     form  = cgi.FieldStorage()
     query = form.getvalue('query')
     caseId = int(form.getvalue('caseId'))
