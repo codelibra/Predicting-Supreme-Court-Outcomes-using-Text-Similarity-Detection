@@ -19,6 +19,7 @@ import pandas as pd
 import numpy as np
 import pyLDAvis.gensim
 from gensim.models import LdaModel
+from collections import Counter
 
 similarities = np.load("/Users/shiv/.bin/10_scotus/data/final model d/cosine_similarity.npy")
 lda_corpus = corpora.MmCorpus('/Users/shiv/.bin/10_scotus/data/final model d/lda-corpus.mm')
@@ -76,6 +77,17 @@ def get_all_cases():
 def get_case_titles(elements):
     return pd.Series(case_data.iloc[elements]['title']).tolist()
 
+def get_case_outcomes(elements):
+
+    outcomes = pd.Series(case_data.iloc[elements]['case_outcome_disposition']).tolist()
+    actual_outcome = outcomes.pop(0)
+    c = Counter(outcomes)
+    # predicting the most common outcome
+    prediction, count = c.most_common()[0]
+    outcomes.insert(0,prediction)
+    outcomes.insert(1,actual_outcome)
+    return outcomes
+
 def get_similar_case_text(id):
     '''
     Given a particular caseId the function would return text of 5 nearest neighbours.
@@ -92,8 +104,8 @@ def get_similar_case_text(id):
 
     word_cloud_indexes.insert(0,id)
     similar_cases['caseTitles'] = get_case_titles(word_cloud_indexes)
+    similar_cases['caseOutcomes'] = get_case_outcomes(word_cloud_indexes)
     return json.dumps(similar_cases)
-
 
 def main(argv):
     form  = cgi.FieldStorage()

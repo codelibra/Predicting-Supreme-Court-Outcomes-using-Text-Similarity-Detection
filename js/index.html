@@ -72,6 +72,25 @@ var setupCallBackHandlers = function() {
         return caseNameA +"<br/> V <br/>"+ caseNameB
       }
 
+      var showCaseOutcomeColor = function(outcome){
+        if(outcome==0){
+          return "centered case-outcome reverse-background";
+        }
+        else{
+          return "centered case-outcome affirm-background";
+        }
+      }
+
+      var showCaseOutcomeText = function(outcome){
+        if(outcome==0){
+          return "REVERSE";
+        }
+        else{
+          return "AFFIRM";
+        }
+      }
+
+
       var $this = $(this);
       var $alias = $this.data('alias');
       clickedCaseId =  $this.index()
@@ -90,7 +109,25 @@ var setupCallBackHandlers = function() {
       $("#case3").html('');
       $("#case4").html('');
       $("#case5").html('');
+      $("#outcome-parent-predicted").html('');
+      $("#outcome-parent-actual").html('');
+      $("#outcome-case1").html('');
+      $("#outcome-case2").html('');
+      $("#outcome-case3").html('');
+      $("#outcome-case4").html('');
+      $("#outcome-case5").html('');
 
+
+      $("#outcome-parent-predicted").removeClass();
+      $("#outcome-parent-actual").removeClass();
+      $("#outcome-case1").removeClass();
+      $("#outcome-case2").removeClass();
+      $("#outcome-case3").removeClass();
+      $("#outcome-case4").removeClass();
+      $("#outcome-case5").removeClass();
+
+      $("#predicted-text").hide();
+      $("#actual-text").hide();
 
       var myWordCloud = wordCloud('#word-cloud',400,600,100,300);
       var myWordCloud1 = wordCloud('#word-cloud1',800,200,700,100);
@@ -111,7 +148,7 @@ var setupCallBackHandlers = function() {
 
                 var obj = jQuery.parseJSON( data );
 
-                console.log(obj['caseTitles'])
+                console.log(obj)
                 showNewWords(myWordCloud, obj['original']);
                 showNewWords(myWordCloud1, obj['case1']);
                 showNewWords(myWordCloud2, obj['case2']);
@@ -124,7 +161,18 @@ var setupCallBackHandlers = function() {
                 $("#case3").html(splitCaseName(obj['caseTitles'][3]));
                 $("#case4").html(splitCaseName(obj['caseTitles'][4]));
                 $("#case5").html(splitCaseName(obj['caseTitles'][5]));
-                $('#loading').hide();
+
+          $("#outcome-parent-predicted").addClass(showCaseOutcomeColor(obj['caseOutcomes'][0])).text(showCaseOutcomeText(obj['caseOutcomes'][0]));
+          $("#outcome-parent-actual").addClass(showCaseOutcomeColor(obj['caseOutcomes'][1])).text(showCaseOutcomeText(obj['caseOutcomes'][1]));
+          $("#outcome-case1").addClass(showCaseOutcomeColor(obj['caseOutcomes'][2])).text(showCaseOutcomeText(obj['caseOutcomes'][2]));
+          $("#outcome-case2").addClass(showCaseOutcomeColor(obj['caseOutcomes'][3])).text(showCaseOutcomeText(obj['caseOutcomes'][3]));
+          $("#outcome-case3").addClass(showCaseOutcomeColor(obj['caseOutcomes'][4])).text(showCaseOutcomeText(obj['caseOutcomes'][4]));
+          $("#outcome-case4").addClass(showCaseOutcomeColor(obj['caseOutcomes'][5])).text(showCaseOutcomeText(obj['caseOutcomes'][5]));
+          $("#outcome-case5").addClass(showCaseOutcomeColor(obj['caseOutcomes'][6])).text(showCaseOutcomeText(obj['caseOutcomes'][6]));
+          $('#loading').hide();
+          $("#predicted-text").show();
+          $("#actual-text").show();
+
           	  }
     	});
 
@@ -175,5 +223,18 @@ var setupCallBackHandlers = function() {
 <p id="case3" class="fixed-case3"></p>
 <p id="case4" class="fixed-case4"></p>
 <p id="case5" class="fixed-case5"></p>
+
+<h3 id="outcome-parent-predicted" class="" style="position: absolute;top: 390px;left: 340px;"></h3>
+<h3 id="outcome-parent-actual" class="" style="position: absolute;top: 420px;left: 340px;"></h3>
+
+<p id="predicted-text" class="" style="position: absolute;top: 390px;left: 260px;display:none">Prediction</p>
+<p id="actual-text" class="" style="position: absolute;top: 420px;left: 260px;display:none">Actual</p>
+
+
+<h3 id="outcome-case1" class="" style="position: absolute;top: 230px;left: 800px;"></h3>
+<h3 id="outcome-case2" class="" style="position: absolute;top: 490px;left: 800px;"></h3>
+<h3 id="outcome-case3" class="" style="position: absolute;top: 190px;left: 1100px;"></h3>
+<h3 id="outcome-case4" class="" style="position: absolute;top: 400px;left: 1100px;"></h3>
+<h3 id="outcome-case5" class="" style="position: absolute;top: 625px;left: 1100px;"></h3>
 
 </body>
