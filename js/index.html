@@ -37,7 +37,7 @@ var pushCaseElement= function(caseName, caseDescription, caseTopic, caseTerm) {
 
   var div1 = $('<div/>').addClass('d-flex w-100 justify-content-between');
   var p = $('<p/>').addClass('mb-1 bordered').text(caseDescription.split(' ').splice(0, 15).join(' '));
-  var small1 = $('<small/>').addClass('centered').text(caseTopic);
+  var small1 = $('<p/>').addClass('centered tags').text(caseTopic);
   var small2 = $('<small>').text("Term " + caseTerm);
 
   $(div1).append(h51);
@@ -62,6 +62,16 @@ var setupAllCasesData = function(allCases){
 
 var setupCallBackHandlers = function() {
   $('.list-group-item').on('click', function() {
+
+
+      var splitCaseName = function(caseName){
+        console.log(caseName);
+        caseNameA = caseName.substring(0, caseName.indexOf("v.")-1);
+        caseNameB = caseName.substring(caseName.indexOf("v.")+2, caseName.indexOf("U.S.")-5);
+
+        return caseNameA +"<br/> V <br/>"+ caseNameB
+      }
+
       var $this = $(this);
       var $alias = $this.data('alias');
       clickedCaseId =  $this.index()
@@ -74,6 +84,13 @@ var setupCallBackHandlers = function() {
       $('#word-cloud3').html('');
       $('#word-cloud4').html('');
       $('#word-cloud5').html('');
+      $("#parent").html('');
+      $("#case1").html('');
+      $("#case2").html('');
+      $("#case3").html('');
+      $("#case4").html('');
+      $("#case5").html('');
+
 
       var myWordCloud = wordCloud('#word-cloud',400,600,100,300);
       var myWordCloud1 = wordCloud('#word-cloud1',800,200,700,100);
@@ -94,13 +111,19 @@ var setupCallBackHandlers = function() {
 
                 var obj = jQuery.parseJSON( data );
 
-
+                console.log(obj['caseTitles'])
                 showNewWords(myWordCloud, obj['original']);
                 showNewWords(myWordCloud1, obj['case1']);
                 showNewWords(myWordCloud2, obj['case2']);
                 showNewWords(myWordCloud3, obj['case3']);
                 showNewWords(myWordCloud4, obj['case4']);
                 showNewWords(myWordCloud5, obj['case5']);
+                $("#parent").html(splitCaseName(obj['caseTitles'][0]));
+                $("#case1").html(splitCaseName(obj['caseTitles'][1]));
+                $("#case2").html(splitCaseName(obj['caseTitles'][2]));
+                $("#case3").html(splitCaseName(obj['caseTitles'][3]));
+                $("#case4").html(splitCaseName(obj['caseTitles'][4]));
+                $("#case5").html(splitCaseName(obj['caseTitles'][5]));
           	  }
     	});
 
@@ -143,7 +166,11 @@ var setupCallBackHandlers = function() {
  <br style="clear: left;" />
 </div>
 
-
-
+<p id="parent" class="fixed-parent"></p>
+<p id="case1"  class="fixed-case1"></p>
+<p id="case2" class="fixed-case2"></p>
+<p id="case3" class="fixed-case3"></p>
+<p id="case4" class="fixed-case4"></p>
+<p id="case5" class="fixed-case5"></p>
 
 </body>

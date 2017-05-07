@@ -61,7 +61,7 @@
           update: function(words) {
               d3.layout.cloud().size([200, 200])
                   .words(words)
-                  .padding(2)
+                  .padding(1)
                   .rotate(function() { return ~~(Math.random() * 2) * 90; })
                   .font("Impact")
                   .fontSize(function(d) { return d.size; })

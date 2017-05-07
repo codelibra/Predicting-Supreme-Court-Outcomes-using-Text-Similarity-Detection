@@ -7,7 +7,66 @@
 
 h3 { color: #7c795d; font-family: 'Trocchi', serif; font-size: 45px; font-weight: normal; line-height: 48px; margin: 0; }
 
+.fixed-parent {
+   position: absolute;
+   top: 250px;
+   left: 430px;
+   width: 10%;
+   font: normal small-caps normal 16px/1.4 Georgia;
+}
 
+.fixed-case1 {
+   position: absolute;
+   top: 120px;
+   left: 640px;
+   width: 10%;
+   font: normal small-caps normal 16px/1.4 Georgia;
+}
+
+.fixed-case2 {
+   position: absolute;
+   top: 400px;
+   left: 640px;
+   width: 10%;
+   font: normal small-caps normal 16px/1.4 Georgia;
+}
+
+.fixed-case3 {
+   position: absolute;
+   top: 60px;
+   left: 980px;
+   width: 10%;
+   font: normal small-caps normal 16px/1.4 Georgia;
+}
+
+.fixed-case4 {
+   position: absolute;
+   top: 250px;
+   left: 980px;
+   width: 10%;
+   font: normal small-caps normal 16px/1.4 Georgia;
+}
+
+
+.fixed-case5 {
+   position: absolute;
+   top: 500px;
+   left: 980px;
+   width: 10%;
+   font: normal small-caps normal 16px/1.4 Georgia;
+}
+
+.tags {
+background: #eee;
+    padding: 0 5px 2px;
+    border-radius: 4px;
+    position: relative;
+    top: -1px;
+    margin: 0 3px 0 1px;
+    font-size: 90%;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+}
 
 #svgContainer {
 	z-index: -10;
