@@ -12,7 +12,7 @@
 
 <script>
 $( document ).ready(function() {
-
+$('#loading').show();
 var pushCaseElement= function(caseName, caseDescription, caseTopic, caseTerm) {
 
   var anchor = $('<a/>').addClass('list-group-item list-group-item-action flex-column align-items-start');
@@ -62,7 +62,7 @@ var setupAllCasesData = function(allCases){
 
 var setupCallBackHandlers = function() {
   $('.list-group-item').on('click', function() {
-
+      $('#loading').show();
 
       var splitCaseName = function(caseName){
         console.log(caseName);
@@ -124,6 +124,7 @@ var setupCallBackHandlers = function() {
                 $("#case3").html(splitCaseName(obj['caseTitles'][3]));
                 $("#case4").html(splitCaseName(obj['caseTitles'][4]));
                 $("#case5").html(splitCaseName(obj['caseTitles'][5]));
+                $('#loading').hide();
           	  }
     	});
 
@@ -145,6 +146,7 @@ var setupCallBackHandlers = function() {
 
             setupAllCasesData(obj);
             setupCallBackHandlers();
+            $('#loading').hide();
       	  }
 	});
 
@@ -156,6 +158,7 @@ var setupCallBackHandlers = function() {
 
 
 <div>
+  <img id="loading" style="position: absolute;top: 200px;left: 550px;" src="ajax-loader.gif" style="width:100;height:100;">
  <div id="case-list" style="float: left; width: 250px;max-height:680px;overflow-y:scroll; " class="list-group">
  </div>
 
