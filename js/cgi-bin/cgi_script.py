@@ -21,12 +21,12 @@ import pyLDAvis.gensim
 from gensim.models import LdaModel
 from collections import Counter
 
-similarities = np.load("/Users/shiv/.bin/10_scotus/data/final model d/cosine_similarity.npy")
-lda_corpus = corpora.MmCorpus('/Users/shiv/.bin/10_scotus/data/final model d/lda-corpus.mm')
-lda = models.LdaModel.load("/Users/shiv/.bin/10_scotus/data/final model d/best_lda.model")
-dictionary =  Dictionary.load('/Users/shiv/.bin/10_scotus/data/final model d/dictionary.dict')
-tf_idf = corpora.MmCorpus('/Users/shiv/.bin/10_scotus/data/final model d/tfidf-corpus.mm')
-case_data = pd.read_csv('/Users/shiv/.bin/10_scotus/data/case_ui_data.csv')
+similarities = np.load("/Users/shiv/.bin/10_scotus/data/lda_final/cosine_similarity.npy")
+lda_corpus = corpora.MmCorpus('/Users/shiv/.bin/10_scotus/data/lda_final/lda-corpus.mm')
+lda = models.LdaModel.load("/Users/shiv/.bin/10_scotus/data/lda_final/best_lda.model")
+dictionary =  Dictionary.load('/Users/shiv/.bin/10_scotus/data/lda_final/dictionary.dict')
+tf_idf = corpora.MmCorpus('/Users/shiv/.bin/10_scotus/data/lda_final/tfidf-corpus.mm')
+case_data = pd.read_csv('/Users/shiv/.bin/10_scotus/data/lda_final/case_ui_data.csv')
 
 def get_top5_similar_document_indexes(index):
     similarity = similarities[index,:]

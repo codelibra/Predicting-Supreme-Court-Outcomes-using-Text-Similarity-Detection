@@ -124,16 +124,27 @@ len(sc_lc['docket'])
 
 
 
+sc_lc = pd.read_csv('../data/sc_lc.csv')
 
-case_data = sc_lc[["year","docket","title", "citation"]]
+case_data = sc_lc[["year","docket","title", "case_outcome_disposition"]]
 
 for col in sc_lc.columns:
     print col
 
 
-case_data.to_csv('../data/case_ui_data.csv')
+
+case_data['case_outcome_disposition'].fillna(0, inplace=True)
+
+case_data[['case_outcome_disposition']] = case_data[['case_outcome_disposition']].astype(int)
 case_data.drop_duplicates(inplace=True)
 
+case_data = case_data[case_data['case_outcome_disposition']!=-1]
+
+
+
+case_data.to_csv('../data/case_ui_data.csv')
+
+np.save('/Users/shiv/.bin/10_scotus/data/lda_final/cosine_similarity.npy',similarities)
 
 
 casees = case_data.to_dict()

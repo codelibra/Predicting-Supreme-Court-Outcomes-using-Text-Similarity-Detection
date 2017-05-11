@@ -24,10 +24,10 @@ print 'Loading input from filesystem... '
 print '1. Document Topic distribution.'
 print '2. Filenames'
 print '3. Number of topics(hard-coded)'
-lda_corpus = corpora.MmCorpus('../data/best_lda/lda-corpus.mm')
-with open('../data/best_lda/filenames.out','rb') as f:
+lda_corpus = corpora.MmCorpus('../data/lda_final/lda-corpus.mm')
+with open('../data/lda_final/filenames.out','rb') as f:
     filenames = pickle.load(f)
-best_num_topics = 40 #ideally from gridsearchcv
+best_num_topics = 100 #ideally from gridsearchcv
 
 print 'Input done!!'
 input_size = len(filenames)
@@ -150,7 +150,7 @@ def get_compare_case_outcomes(cases):
     return neighbour_filename_outcome,outcome
 
 
-feature_weights = {'topic' : 1, 'citations' : 20, 'issue' : 15, 'issueArea' : 5, 'lawSupp': 3}
+feature_weights = {'topic' : 1, 'citations' : 3, 'issue' : 10, 'issueArea' : 5, 'lawSupp': 8}
 
 def calculate_begina_and_end_index():
     weightage_indexes = {}
@@ -190,7 +190,10 @@ def compute_pairwise_cosine_similarity():
     similarities = calculate_cosine_similarity(lda_dataframe, weightage_indexes)
 
     for idx1,row1 in enumerate(lda_dataframe.itertuples()):
-        similarity = similarities[idx1,:]
+
+        similarity = similarities[5,:]
+
+
         cases_indexes = np.array(similarity).argsort()[::-1][1:11]
         cases = all_file_names[cases_indexes]
 
